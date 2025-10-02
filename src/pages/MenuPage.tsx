@@ -103,7 +103,7 @@ export const MenuPage: React.FC = () => {
       }
       
       // Filtro de categoria (tipo de refeição)
-      if (category && recipe.category !== category) return false
+      if (category && recipe.category.toLowerCase() !== category.toLowerCase()) return false
       
       // Filtro de tempo
       if (time !== 'any') {
