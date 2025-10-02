@@ -1642,8 +1642,8 @@ export const MenuPage: React.FC = () => {
         />
 
         {showCatalog && (
-          <div onClick={()=>setShowCatalog(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', padding:12, zIndex:1200 }}>
-            <div onClick={(e)=>e.stopPropagation()} style={{ width:'100%', maxWidth:1080, background: colors.surface, borderRadius:12, overflow:'hidden', maxHeight:'90vh', display:'flex', flexDirection:'column' }}>
+          <div onClick={()=>setShowCatalog(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'flex-start', justifyContent:'center', padding:12, zIndex:1200, overflowY:'auto' }}>
+            <div onClick={(e)=>e.stopPropagation()} style={{ width:'100%', maxWidth:1080, background: colors.surface, borderRadius:12, marginTop:'5vh', marginBottom:'5vh', display:'flex', flexDirection:'column', minHeight:'90vh' }}>
               <div style={{ padding: '20px', borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   {showCatalog && <div style={{ fontWeight:800, color: colors.primary, fontSize: fontSizes.lg }}>Substitua {showCatalog.meal} de {showCatalog.day}</div>}
@@ -1754,7 +1754,7 @@ export const MenuPage: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div style={{ padding: '20px', overflow: 'auto', flex: 1 }}>
+              <div style={{ padding: '20px', flex: 1 }}>
                 <RecipeCatalog
                   data={displayedCatalogRecipes}
                   filters={catalogFilters}
