@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        " @supabase/mcp-server-supabase@latest",
+        "--project-ref=yspxyqrehhibogspctck"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_f2b209bedf7fe72660583652de91288c85c2d527"
+      }
+    },
+    "server-sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@smithery-ai/server-sequential-thinking@latest",
+        "--key",
+        "9f20a536-6ff0-47c1-b94b-f9eb723e5f7d",
+        "--profile",
+        "missing-turkey-rjzz4y"
+      ]
+    },
+    "Browser Tools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        " @agentdeskai/browser-tools-mcp@1.2.0"
+      ]
+    },
+    "Resend": {
+      "name": "Resend",
+      "url": "https://resend.com/docs/mcp",
+      "headers": {}
+    }
+  }
+}
