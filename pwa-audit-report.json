@@ -1,0 +1,281 @@
+{
+  "timestamp": "2025-10-02T18:51:58.277Z",
+  "results": {
+    "passed": 45,
+    "failed": 0,
+    "warnings": 0,
+    "checks": [
+      {
+        "name": "Arquivo public/manifest.json",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Arquivo public/sw.js",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Arquivo index.html",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Arquivo public/.htaccess",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Arquivo public/robots.txt",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Arquivo public/browserconfig.xml",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Diretório de ícones",
+        "passed": true,
+        "message": "Diretório encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-72x72.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-96x96.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-128x128.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-144x144.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-152x152.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-192x192.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-384x384.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícone icon-512x512.png",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Ícones maskable",
+        "passed": true,
+        "message": "8 ícones maskable encontrados",
+        "isWarning": true
+      },
+      {
+        "name": "Manifest name",
+        "passed": true,
+        "message": "Valor: \"Sazonal Chef\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest short_name",
+        "passed": true,
+        "message": "Valor: \"Sazonal Chef\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest start_url",
+        "passed": true,
+        "message": "Valor: \"/\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest display",
+        "passed": true,
+        "message": "Valor: \"standalone\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest background_color",
+        "passed": true,
+        "message": "Valor: \"#F5F0E5\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest theme_color",
+        "passed": true,
+        "message": "Valor: \"#8B4513\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest icons",
+        "passed": true,
+        "message": "Valor: [{\"src\":\"/icons/icon-72x72.png\",\"sizes\":\"72x72\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-96x96.png\",\"sizes\":\"96x96\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-128x128.png\",\"sizes\":\"128x128\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-144x144.png\",\"sizes\":\"144x144\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-152x152.png\",\"sizes\":\"152x152\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-192x192.png\",\"sizes\":\"192x192\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-384x384.png\",\"sizes\":\"384x384\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-512x512.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"any\"},{\"src\":\"/icons/icon-72x72-maskable.png\",\"sizes\":\"72x72\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-96x96-maskable.png\",\"sizes\":\"96x96\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-128x128-maskable.png\",\"sizes\":\"128x128\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-144x144-maskable.png\",\"sizes\":\"144x144\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-152x152-maskable.png\",\"sizes\":\"152x152\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-192x192-maskable.png\",\"sizes\":\"192x192\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-384x384-maskable.png\",\"sizes\":\"384x384\",\"type\":\"image/png\",\"purpose\":\"maskable\"},{\"src\":\"/icons/icon-512x512-maskable.png\",\"sizes\":\"512x512\",\"type\":\"image/png\",\"purpose\":\"maskable\"}]",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest orientation",
+        "passed": true,
+        "message": "Valor: \"portrait-primary\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest scope",
+        "passed": true,
+        "message": "Valor: \"/\"",
+        "isWarning": false
+      },
+      {
+        "name": "Manifest lang",
+        "passed": true,
+        "message": "Valor: \"pt-BR\"",
+        "isWarning": false
+      },
+      {
+        "name": "Ícones no manifest",
+        "passed": true,
+        "message": "16 ícones definidos no manifest",
+        "isWarning": false
+      },
+      {
+        "name": "Tamanhos de ícones obrigatórios",
+        "passed": true,
+        "message": "Tamanhos 192x192 e 512x512 encontrados",
+        "isWarning": false
+      },
+      {
+        "name": "SW Event listener install",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "SW Event listener activate",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "SW Event listener fetch",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "SW Cache strategy",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "SW Push notifications",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "SW Notification click",
+        "passed": true,
+        "message": "Implementado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Meta viewport",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Meta theme-color",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Manifest link",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Apple touch icon",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Favicon",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "HTML Service Worker registration",
+        "passed": true,
+        "message": "Encontrado",
+        "isWarning": false
+      },
+      {
+        "name": "Vite Build target ES2015",
+        "passed": true,
+        "message": "Configurado",
+        "isWarning": true
+      },
+      {
+        "name": "Vite Minificação",
+        "passed": true,
+        "message": "Configurado",
+        "isWarning": true
+      },
+      {
+        "name": "Vite Chunks manuais",
+        "passed": true,
+        "message": "Configurado",
+        "isWarning": true
+      },
+      {
+        "name": "Versão do package",
+        "passed": true,
+        "message": "Versão: 1.0.0",
+        "isWarning": false
+      },
+      {
+        "name": "Scripts PWA",
+        "passed": "node scripts/build-pwa.mjs",
+        "message": "Scripts PWA encontrados",
+        "isWarning": false
+      }
+    ]
+  },
+  "successRate": 100
+}

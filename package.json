@@ -1,13 +1,18 @@
 {
   "name": "sazonal-chef",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host --port 5174 --strictPort",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
+    "build:pwa": "node scripts/build-pwa.mjs",
+    "build:prod": "npm run build:pwa",
     "lint": "eslint .",
     "preview": "vite preview",
+    "preview:pwa": "npm run build:pwa && vite preview --port 4173",
+    "icons:generate": "node scripts/generate-pwa-icons.mjs",
+    "pwa:audit": "node scripts/audit-pwa.mjs",
     "check:supabase": "node --env-file=.env ./scripts/checkSupabase.mjs",
     "seed:user": "node --env-file=.env ./scripts/seedUser.mjs",
     "seed:recipes": "node --env-file=.env ./scripts/seedRecipes.mjs",
@@ -25,6 +30,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
     "@types/lodash": "^4.17.20",
+    "canvas": "^3.2.0",
     "dotenv": "^17.2.1",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.22",
