@@ -19,7 +19,7 @@ export default defineConfig({
     host: true
   },
   build: {
-    // Otimizações para PWA e compatibilidade com Vercel
+    // Configurações simplificadas para melhor compatibilidade
     target: 'es2015',
     minify: 'terser',
     sourcemap: false,
@@ -30,13 +30,6 @@ export default defineConfig({
           supabase: ['@supabase/supabase-js'],
           router: ['react-router-dom']
         }
-      },
-      external: (id) => {
-        // Evitar problemas com dependências opcionais do Rollup
-        if (id.includes('@rollup/rollup-linux')) {
-          return false
-        }
-        return false
       }
     },
     terserOptions: {
