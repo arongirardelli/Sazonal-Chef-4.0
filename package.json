@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:pwa": "node scripts/build-pwa.mjs",
     "build:prod": "npm run build:pwa",
+    "vercel-build": "npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview:pwa": "npm run build:pwa && vite preview --port 4173",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.0.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@testsprite/testsprite-mcp": "^0.0.13",
     "@types/react": "^19.1.10",
@@ -56,10 +58,20 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
+    "rollup": "^4.0.0",
     "tailwindcss": "^4.1.12",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "overrides": {
+    "rollup": "^4.0.0"
+  },
+  "resolutions": {
+    "@rollup/rollup-linux-x64-gnu": "^4.0.0"
   }
 }

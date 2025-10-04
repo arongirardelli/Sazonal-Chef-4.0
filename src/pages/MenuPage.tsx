@@ -430,12 +430,6 @@ export const MenuPage: React.FC = () => {
           minWidth: '320px'
         }}>
           <div style={{ 
-            fontSize: '24px',
-            animation: 'spin 1s linear infinite'
-          }}>
-            🍳
-          </div>
-          <div style={{ 
             display: 'flex', 
             flexDirection: 'column', 
             gap: '2px'
@@ -451,9 +445,18 @@ export const MenuPage: React.FC = () => {
             <div style={{ 
               fontSize: '14px', 
               fontWeight: '500',
-              color: '#374151'
+              color: '#374151',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}>
-              Um momento...
+              Um momento... 
+              <span style={{ 
+                fontSize: '18px',
+                animation: 'spin 1s linear infinite'
+              }}>
+                🍳
+              </span>
             </div>
           </div>
         </div>,
@@ -525,37 +528,9 @@ export const MenuPage: React.FC = () => {
           }
         })
       } else {
-        toast.success(
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            alignItems: 'center', 
-            justifyContent: 'center',
-            width: '100%',
-            textAlign: 'center',
-            gap: '4px'
-          }}>
-            <div style={{ fontSize: '14px', fontWeight: '500' }}>
-              Cardápio gerado com sucesso!
-            </div>
-            <div style={{ fontSize: '14px', fontWeight: '500' }}>
-              Revise e salve para ver a lista de compras.
-            </div>
-          </div>,
-          {
-            style: {
-              minWidth: 'fit-content',
-              padding: '16px 24px',
-              borderRadius: '8px',
-              textAlign: 'center',
-              fontSize: '14px',
-              fontWeight: '500',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }
-          }
-        )
+        toast('🎉 Cardápio gerado com sucesso!', {
+          style: toastStyles.success
+        })
       }
     } catch (error) {
       console.error('Erro ao gerar cardápio:', error)
@@ -621,37 +596,9 @@ export const MenuPage: React.FC = () => {
       // Atualizar o estado do menu para refletir exatamente o que foi salvo
       setMenu(allDisplayedSlots.filter(slot => slot.recipe))
       
-      toast.success(
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column',
-          alignItems: 'center', 
-          justifyContent: 'center',
-          width: '100%',
-          textAlign: 'center',
-          gap: '4px'
-        }}>
-          <div style={{ fontSize: '14px', fontWeight: '500' }}>
-            Cardápio salvo com sucesso!
-          </div>
-          <div style={{ fontSize: '12px', fontWeight: '400', color: '#6b7280' }}>
-            Lista de compras atualizada automaticamente
-          </div>
-        </div>,
-        {
-          style: {
-            minWidth: 'fit-content',
-            padding: '16px 20px',
-            borderRadius: '8px',
-            textAlign: 'center',
-            fontSize: '14px',
-            fontWeight: '500',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }
-        }
-      )
+      toast('✅ Cardápio salvo com sucesso!', {
+        style: toastStyles.success
+      })
     } catch (e: any) {
       console.error('Erro ao salvar cardápio:', e)
       toast.error(`Erro ao salvar: ${e.message}`, {
@@ -961,9 +908,9 @@ export const MenuPage: React.FC = () => {
                 background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
                 borderRadius: '2px'
               }} />
-              <Calendar size={24} color={colors.primary} />
+              <Calendar size={24} color="#8B4513" />
               <h1 style={{
-                color: colors.primary,
+                color: '#8B4513',
                 fontSize: fontSizes['3xl'],
                 fontWeight: 800,
                 margin: 0,
@@ -1180,7 +1127,7 @@ export const MenuPage: React.FC = () => {
               <button 
                 onClick={generateNewMenu} 
                 style={{ 
-                  background: `linear-gradient(135deg, #22c55e 0%, #16a34a 100%)`,
+                  background: `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`,
                   color: '#fff',
                   padding: '12px 20px',
                   borderRadius: '12px',
@@ -1192,15 +1139,15 @@ export const MenuPage: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(34, 197, 94, 0.3)'
+                  boxShadow: '0 2px 8px rgba(44, 85, 48, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(34, 197, 94, 0.4)'
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 85, 48, 0.4)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(34, 197, 94, 0.3)'
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(44, 85, 48, 0.3)'
                 }}
               >
                 <Sparkles size={16} />
@@ -1219,7 +1166,7 @@ export const MenuPage: React.FC = () => {
                 onClick={handleSaveMenu} 
                 disabled={isSaving} 
                 style={{ 
-                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                  background: '#CD853F',
                   color: '#fff',
                   padding: '12px 20px',
                   borderRadius: '12px',
@@ -1232,18 +1179,18 @@ export const MenuPage: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.2s ease',
-                  boxShadow: `0 2px 8px ${colors.primary}30`
+                  boxShadow: '0 2px 8px rgba(205, 133, 63, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSaving) {
                     e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = `0 4px 12px ${colors.primary}40`
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(205, 133, 63, 0.4)'
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSaving) {
                     e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = `0 2px 8px ${colors.primary}30`
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(205, 133, 63, 0.3)'
                   }
                 }}
               >
@@ -1262,7 +1209,7 @@ export const MenuPage: React.FC = () => {
               <button 
                 onClick={()=>navigate('/shopping')} 
                 style={{ 
-                  background: `linear-gradient(135deg, #D35400 0%, #B7410E 100%)`,
+                  background: `linear-gradient(135deg, #8B4513 0%, #654321 100%)`,
                   color: '#fff',
                   padding: '12px 20px',
                   borderRadius: '12px',
@@ -1274,15 +1221,15 @@ export const MenuPage: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(211, 84, 0, 0.3)'
+                  boxShadow: '0 2px 8px rgba(139, 69, 19, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(211, 84, 0, 0.4)'
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(139, 69, 19, 0.4)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(211, 84, 0, 0.3)'
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(139, 69, 19, 0.3)'
                 }}
               >
                 <ShoppingCart size={16} />
@@ -1316,7 +1263,7 @@ export const MenuPage: React.FC = () => {
             }} />
             <h3 style={{
               margin: 0,
-              color: colors.primary,
+              color: '#8B4513',
               fontSize: fontSizes.xl,
               fontWeight: 700
             }}>
@@ -1353,7 +1300,7 @@ export const MenuPage: React.FC = () => {
                       right: '-20px',
                       width: '40px',
                       height: '40px',
-                      background: `radial-gradient(circle, ${colors.primary}20 0%, transparent 70%)`,
+                      background: `radial-gradient(circle, #2C553020 0%, transparent 70%)`,
                       borderRadius: '50%',
                       opacity: 0.6
                     }} />
@@ -1370,13 +1317,13 @@ export const MenuPage: React.FC = () => {
                     <div style={{
                       textTransform: 'capitalize',
                       fontWeight: 700,
-                      color: colors.primary,
+                      color: '#8B4513',
                       fontSize: fontSizes.lg,
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px'
                     }}>
-                      <ChefHat size={18} />
+                      <ChefHat size={18} color="#8B4513" />
                       {day}
                     </div>
                     <button 
@@ -1384,29 +1331,32 @@ export const MenuPage: React.FC = () => {
                       style={{
                         padding: '8px 16px',
                         borderRadius: '12px',
-                        border: `2px solid ${isDayEnabled ? colors.primary : colors.border}`,
-                        background: isDayEnabled ? colors.primary : colors.surface,
-                        color: isDayEnabled ? colors.surface : colors.primary,
+                        border: `2px solid ${isDayEnabled ? '#2C5530' : colors.border}`,
+                        background: isDayEnabled ? '#2C5530' : colors.surface,
+                        color: isDayEnabled ? colors.surface : '#2C5530',
                         cursor: 'pointer',
                         fontSize: fontSizes.sm,
                         fontWeight: 600,
                         transition: 'all 0.2s ease',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        justifyContent: 'center',
+                        gap: '6px',
+                        minWidth: '120px',
+                        whiteSpace: 'nowrap'
                       }}
                       onMouseEnter={(e) => {
                         if (isDayEnabled) {
-                          e.currentTarget.style.background = colors.secondary
-                          e.currentTarget.style.borderColor = colors.secondary
+                          e.currentTarget.style.background = '#1e3a22'
+                          e.currentTarget.style.borderColor = '#1e3a22'
                         } else {
                           e.currentTarget.style.background = colors.accent
-                          e.currentTarget.style.borderColor = colors.primary
+                          e.currentTarget.style.borderColor = '#2C5530'
                         }
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = isDayEnabled ? colors.primary : colors.surface
-                        e.currentTarget.style.borderColor = isDayEnabled ? colors.primary : colors.border
+                        e.currentTarget.style.background = isDayEnabled ? '#2C5530' : colors.surface
+                        e.currentTarget.style.borderColor = isDayEnabled ? '#2C5530' : colors.border
                       }}
                     >
                       {isDayEnabled ? '✓ Selecionado' : 'Selecionar dia'}
@@ -1430,7 +1380,7 @@ export const MenuPage: React.FC = () => {
                             padding: '8px 12px',
                             borderRadius: '20px',
                             border: `2px solid ${isMealSelected ? colors.primary : colors.border}`,
-                            background: isMealSelected ? colors.primary : colors.surface,
+                            background: isMealSelected ? colors.primary : colors.background,
                             color: isMealSelected ? colors.surface : colors.text,
                             cursor: 'pointer',
                             fontSize: fontSizes.sm,
@@ -1438,19 +1388,20 @@ export const MenuPage: React.FC = () => {
                             transition: 'all 0.2s ease',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '6px'
+                            gap: '6px',
+                            boxShadow: isMealSelected ? `0 2px 8px ${colors.primary}30` : `0 1px 3px ${colors.border}20`
                           }}
                           onMouseEnter={(e) => {
                             if (isMealSelected) {
-                              e.currentTarget.style.background = colors.secondary
-                              e.currentTarget.style.borderColor = colors.secondary
+                              e.currentTarget.style.background = colors.primary
+                              e.currentTarget.style.borderColor = colors.primary
                             } else {
                               e.currentTarget.style.background = colors.accent
                               e.currentTarget.style.borderColor = colors.primary
                             }
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.background = isMealSelected ? colors.primary : colors.surface
+                            e.currentTarget.style.background = isMealSelected ? colors.primary : colors.background
                             e.currentTarget.style.borderColor = isMealSelected ? colors.primary : colors.border
                           }}
                         >
@@ -1512,7 +1463,7 @@ export const MenuPage: React.FC = () => {
                   }} />
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: '#8B4513', 
                     textTransform: 'capitalize', 
                     fontSize: fontSizes.xl,
                     fontWeight: 700,
@@ -1520,7 +1471,7 @@ export const MenuPage: React.FC = () => {
                     alignItems: 'center',
                     gap: '8px'
                   }}>
-                    <Calendar size={20} />
+                    <Calendar size={20} color="#8B4513" />
                     {day}
                   </h3>
                 </div>
@@ -1677,7 +1628,7 @@ export const MenuPage: React.FC = () => {
                         borderRadius: 16, 
                         border: `1px solid ${colors.border}`, 
                         background: catalogFilters.category === c ? colors.primary : colors.surface, 
-                        color: catalogFilters.category === c ? colors.surface : colors.primary, 
+                        color: catalogFilters.category === c ? colors.surface : colors.text, 
                         fontSize: 13,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease'
@@ -1699,7 +1650,7 @@ export const MenuPage: React.FC = () => {
                         borderRadius: 16, 
                         border: `1px solid ${colors.border}`, 
                         background: catalogFilters.time === t ? colors.primary : colors.surface, 
-                        color: catalogFilters.time === t ? colors.surface : colors.primary, 
+                        color: catalogFilters.time === t ? colors.surface : colors.text, 
                         fontSize: 13,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease'
@@ -1721,7 +1672,7 @@ export const MenuPage: React.FC = () => {
                         borderRadius: 16, 
                         border: `1px solid ${colors.border}`, 
                         background: catalogFilters.difficulty === d ? colors.primary : colors.surface, 
-                        color: catalogFilters.difficulty === d ? colors.surface : colors.primary, 
+                        color: catalogFilters.difficulty === d ? colors.surface : colors.text, 
                         fontSize: 13,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease'
@@ -1743,7 +1694,7 @@ export const MenuPage: React.FC = () => {
                         borderRadius: 16, 
                         border: `1px solid ${colors.border}`, 
                         background: catalogFilters.diet === d ? colors.primary : colors.surface, 
-                        color: catalogFilters.diet === d ? colors.surface : colors.primary, 
+                        color: catalogFilters.diet === d ? colors.surface : colors.text, 
                         fontSize: 13,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease'
