@@ -1,16 +1,12 @@
 // Service Worker para Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v2.0.0'
-const STATIC_CACHE = 'sazonal-chef-static-v2.0.0'
-const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v2.0.0'
-const API_CACHE = 'sazonal-chef-api-v2.0.0'
+const CACHE_NAME = 'sazonal-chef-v3.0.0'
+const STATIC_CACHE = 'sazonal-chef-static-v3.0.0'
+const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v3.0.0'
 
 // Recursos estáticos para cache imediato
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/index.css',
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
@@ -18,14 +14,6 @@ const STATIC_ASSETS = [
   '/icons/apple-touch-icon-180x180.png',
   '/icons/favicon-32x32.png',
   '/icons/favicon-16x16.png'
-]
-
-// Recursos dinâmicos para cache sob demanda
-const DYNAMIC_PATTERNS = [
-  /^https:\/\/.*\.supabase\.co\/rest\/v1\//,
-  /^https:\/\/.*\.supabase\.co\/storage\/v1\//,
-  /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-  /\.(?:css|js|woff2?|ttf|eot)$/
 ]
 
 // Instalação do Service Worker
@@ -56,8 +44,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== STATIC_CACHE && 
-                cacheName !== DYNAMIC_CACHE && 
-                cacheName !== API_CACHE) {
+                cacheName !== DYNAMIC_CACHE) {
               console.log('[SW] Removendo cache antigo:', cacheName)
               return caches.delete(cacheName)
             }
@@ -87,13 +74,7 @@ self.addEventListener('fetch', (event) => {
 
   // Estratégia para APIs do Supabase
   if (url.hostname.includes('supabase.co')) {
-    event.respondWith(networkFirst(request, API_CACHE))
-    return
-  }
-
-  // Estratégia para recursos dinâmicos
-  if (DYNAMIC_PATTERNS.some(pattern => pattern.test(request.url))) {
-    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE))
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE))
     return
   }
 
@@ -152,21 +133,6 @@ async function networkFirst(request, cacheName) {
   }
 }
 
-// Estratégia Stale While Revalidate
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName)
-  const cached = await cache.match(request)
-  
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.status === 200) {
-      cache.put(request, response.clone())
-    }
-    return response
-  }).catch(() => cached)
-  
-  return cached || fetchPromise
-}
-
 // Notificações Push
 self.addEventListener('push', (event) => {
   console.log('[SW] Push recebido:', event)
@@ -177,7 +143,7 @@ self.addEventListener('push', (event) => {
   try {
     payload = event.data.json()
   } catch (error) {
-    payload = { title: 'Sazonal Chef', body: event.data.text() }
+    payload = { title: 'Sazonal Chef: Seu App que Transforma Sua Relação com a Comida', body: event.data.text() }
   }
   
   const title = payload.title || 'Sazonal Chef: Seu App que Transforma Sua Relação com a Comida'
@@ -237,53 +203,4 @@ self.addEventListener('notificationclick', (event) => {
   )
 })
 
-// Sincronização em background
-self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync:', event.tag)
-  
-  if (event.tag === 'background-sync') {
-    event.waitUntil(doBackgroundSync())
-  }
-})
-
-async function doBackgroundSync() {
-  try {
-    // Implementar lógica de sincronização offline
-    console.log('[SW] Executando sincronização em background...')
-    
-    // Exemplo: sincronizar receitas salvas offline
-    const cache = await caches.open(DYNAMIC_CACHE)
-    const requests = await cache.keys()
-    
-    for (const request of requests) {
-      if (request.url.includes('/api/recipes')) {
-        try {
-          await fetch(request)
-          console.log('[SW] Sincronizado:', request.url)
-        } catch (error) {
-          console.log('[SW] Falha na sincronização:', request.url)
-        }
-      }
-    }
-  } catch (error) {
-    console.error('[SW] Erro na sincronização:', error)
-  }
-}
-
-// Mensagens do cliente
-self.addEventListener('message', (event) => {
-  console.log('[SW] Mensagem recebida:', event.data)
-  
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting()
-  }
-  
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_NAME })
-  }
-})
-
 console.log('[SW] Service Worker carregado com sucesso')
-
-
-
