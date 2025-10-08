@@ -365,7 +365,7 @@ export const Categories: React.FC = () => {
         <div style={{ position: 'absolute', bottom: '-20px', left: '-20px', width: '60px', height: '60px', background: `radial-gradient(circle, ${colors.secondary}10 0%, transparent 70%)`, borderRadius: '50%', opacity: 0.4 }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ width: '40px', height: '3px', background: `linear-gradient(90deg, ${colors.primary} 0%, ${colors.primary}40 100%)`, borderRadius: '2px', marginBottom: '16px' }} />
-          <h1 style={{ margin: '0 0 8px 0', color: colors.primary, fontSize: fontSizes['3xl'], fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+          <h1 style={{ margin: '0 0 8px 0', color: '#8B4513', fontSize: fontSizes['3xl'], fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
             Categorias
           </h1>
           <p style={{ color: colors.textSecondary, fontSize: fontSizes.lg, margin: 0, fontWeight: 500, lineHeight: 1.5, maxWidth: '500px' }}>
@@ -409,7 +409,7 @@ export const Categories: React.FC = () => {
       <div style={{ padding: '24px', background: colors.surface, borderRadius: '16px', marginBottom: '24px', border: `1px solid ${colors.border}`, boxShadow: `0 2px 8px ${colors.border}20` }}>
         {/* Tipo de Refeição */}
         <div style={{ marginBottom: '24px' }}>
-          <h3 style={{ margin: '0 0 12px 0', color: colors.primary, fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tipo de Refeição</h3>
+          <h3 style={{ margin: '0 0 12px 0', color: '#8B4513', fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tipo de Refeição</h3>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {MEALS.map(c => (
               <button key={c} onClick={() => handleFilterChange('category', c === filters.category ? '' : c)} style={{ padding: '10px 16px', borderRadius: '20px', border: `2px solid ${filters.category === c ? colors.primary : colors.border}`, background: filters.category === c ? colors.primary : colors.background, color: filters.category === c ? colors.surface : colors.text, fontSize: fontSizes.sm, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: filters.category === c ? `0 2px 8px ${colors.primary}30` : `0 1px 3px ${colors.border}20` }}>
@@ -420,7 +420,7 @@ export const Categories: React.FC = () => {
         </div>
         {/* Tempo de Preparo */}
         <div style={{ marginBottom: '24px' }}>
-          <h3 style={{ margin: '0 0 12px 0', color: colors.primary, fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tempo de Preparo</h3>
+          <h3 style={{ margin: '0 0 12px 0', color: '#8B4513', fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tempo de Preparo</h3>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {TIME_OPTIONS.map(t => (
               <button key={t} onClick={() => handleFilterChange('time', t)} style={{ padding: '10px 16px', borderRadius: '20px', border: `2px solid ${filters.time === t ? colors.primary : colors.border}`, background: filters.time === t ? colors.primary : colors.background, color: filters.time === t ? colors.surface : colors.text, fontSize: fontSizes.sm, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: filters.time === t ? `0 2px 8px ${colors.primary}30` : `0 1px 3px ${colors.border}20` }}>
@@ -431,7 +431,7 @@ export const Categories: React.FC = () => {
         </div>
         {/* Dificuldade */}
         <div style={{ marginBottom: '24px' }}>
-          <h3 style={{ margin: '0 0 12px 0', color: colors.primary, fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Dificuldade</h3>
+          <h3 style={{ margin: '0 0 12px 0', color: '#8B4513', fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Dificuldade</h3>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {DIFFICULTY_OPTIONS.map(d => (
               <button key={d} onClick={() => handleFilterChange('difficulty', d)} style={{ padding: '10px 16px', borderRadius: '20px', border: `2px solid ${filters.difficulty === d ? colors.primary : colors.border}`, background: filters.difficulty === d ? colors.primary : colors.background, color: filters.difficulty === d ? colors.surface : colors.text, fontSize: fontSizes.sm, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: filters.difficulty === d ? `0 2px 8px ${colors.primary}30` : `0 1px 3px ${colors.border}20` }}>
@@ -442,7 +442,7 @@ export const Categories: React.FC = () => {
         </div>
         {/* Tipo de Dieta */}
         <div>
-          <h3 style={{ margin: '0 0 12px 0', color: colors.primary, fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tipo de Dieta</h3>
+          <h3 style={{ margin: '0 0 12px 0', color: '#8B4513', fontSize: fontSizes.base, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>Tipo de Dieta</h3>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {DIET_OPTIONS.map(d => (
               <button key={d} onClick={() => handleFilterChange('diet', d)} style={{ padding: '10px 16px', borderRadius: '20px', border: `2px solid ${filters.diet === d ? colors.primary : colors.border}`, background: filters.diet === d ? colors.primary : colors.background, color: filters.diet === d ? colors.surface : colors.text, fontSize: fontSizes.sm, fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: filters.diet === d ? `0 2px 8px ${colors.primary}30` : `0 1px 3px ${colors.border}20` }}>

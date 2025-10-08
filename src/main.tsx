@@ -61,7 +61,29 @@ const App = () => {
               <Route path="/help" element={<HelpSupport />} />
               <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Routes>
-            <Toaster position="top-center" />
+            <Toaster 
+              position="top-center" 
+              offset={16}
+              gap={8}
+              expand={true}
+              richColors={false}
+              closeButton={false}
+              toastOptions={{
+                style: {
+                  width: 'auto',
+                  maxWidth: '420px',
+                  minWidth: '320px',
+                  margin: '0 auto',
+                  boxSizing: 'border-box',
+                  position: 'relative',
+                  left: 'auto',
+                  right: 'auto',
+                  transform: 'none'
+                },
+                className: 'toast-responsive',
+                duration: 4000
+              }}
+            />
         </BrowserRouter>
       </AppPreferencesProvider>
     </AuthProvider>

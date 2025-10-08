@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Eye, EyeOff, Mail, User, ChefHat, CheckCircle, XCircle } from 'lucide-react'
+import { Eye, EyeOff, Mail, User, CheckCircle, XCircle } from 'lucide-react'
+import { Logo } from '../components/Logo'
 import { toast } from 'sonner'
 
 export const RegisterPage: React.FC = () => {
@@ -44,19 +45,94 @@ export const RegisterPage: React.FC = () => {
     
     if (!displayName || !email || !password || !confirmPassword) {
       console.log('❌ [RegisterPage] Campos vazios detectados');
-      toast.error('Por favor, preencha todos os campos')
+      toast.error('Por favor, preencha todos os campos', {
+        className: 'toast-register-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
       return
     }
 
     if (password !== confirmPassword) {
       console.log('❌ [RegisterPage] Senhas não coincidem');
-      toast.error('As senhas não coincidem')
+      toast.error('As senhas não coincidem', {
+        className: 'toast-register-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
       return
     }
 
     if (passwordStrength < 4) {
       console.log('❌ [RegisterPage] Senha não atende aos requisitos');
-      toast.error('A senha não atende aos requisitos mínimos')
+      toast.error('A senha não atende aos requisitos mínimos', {
+        className: 'toast-register-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
       return
     }
 
@@ -71,15 +147,90 @@ export const RegisterPage: React.FC = () => {
       
       if (result.success) {
         console.log('✅ [RegisterPage] Cadastro realizado com sucesso!');
-        toast.success('Cadastro realizado com sucesso! Faça o login para começar.')
+        toast.success('Cadastro realizado com sucesso! Faça o login para começar.', {
+          className: 'toast-register-success',
+          style: {
+            background: 'white',
+            color: '#2F2F2F',
+            border: '1px solid #E0E0E0',
+            borderRadius: '12px',
+            padding: '16px 24px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            maxWidth: '380px',
+            minWidth: '300px',
+            margin: '0 auto',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            lineHeight: '1.4',
+            letterSpacing: '0.01em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            width: '100%'
+          }
+        })
         navigate('/login')
       } else {
         console.log('❌ [RegisterPage] Falha no cadastro:', result.message);
-        toast.error(result.message || 'Falha no cadastro')
+        toast.error(result.message || 'Falha no cadastro', {
+          className: 'toast-register-error',
+          style: {
+            background: 'white',
+            color: '#2F2F2F',
+            border: '1px solid #E0E0E0',
+            borderRadius: '12px',
+            padding: '16px 24px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            maxWidth: '380px',
+            minWidth: '300px',
+            margin: '0 auto',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            lineHeight: '1.4',
+            letterSpacing: '0.01em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            width: '100%'
+          }
+        })
       }
     } catch (error) {
       console.error('💥 [RegisterPage] Erro interno:', error);
-      toast.error('Erro interno no cadastro')
+      toast.error('Erro interno no cadastro', {
+        className: 'toast-register-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
     } finally {
       setLoading(false)
     }
@@ -89,7 +240,7 @@ export const RegisterPage: React.FC = () => {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #F5F0E5 0%, #E8E0D0 50%, #D4C8B8 100%)',
+      background: 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 50%, #D2B48C 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -118,25 +269,25 @@ export const RegisterPage: React.FC = () => {
       justifyContent: 'center',
       width: '80px',
       height: '80px',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       borderRadius: '50%',
       marginBottom: '32px',
-      boxShadow: '0 8px 24px rgba(44, 85, 48, 0.3)',
+      boxShadow: '0 8px 24px rgba(205, 133, 63, 0.3)',
       animation: 'pulse 2s infinite'
     },
     title: {
       fontSize: '32px',
       fontWeight: '800',
-      color: '#1a202c',
+      color: '#CD853F',
       marginBottom: '12px',
       margin: '0',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       WebkitBackgroundClip: 'text' as const,
       WebkitTextFillColor: 'transparent',
       backgroundClip: 'text'
     },
     subtitle: {
-      color: '#64748b',
+      color: '#555555',
       fontSize: '18px',
       margin: '0',
       fontWeight: '500'
@@ -151,7 +302,7 @@ export const RegisterPage: React.FC = () => {
       display: 'block',
       fontSize: '16px',
       fontWeight: '600',
-      color: '#374151',
+      color: '#2F2F2F',
       marginBottom: '12px',
       transition: 'color 0.2s ease'
     },
@@ -184,7 +335,7 @@ export const RegisterPage: React.FC = () => {
     inputFocus: {
       border: '2px solid #2C5530',
       backgroundColor: 'white',
-      boxShadow: '0 0 0 4px rgba(44, 85, 48, 0.1)',
+      boxShadow: '0 0 0 4px rgba(205, 133, 63, 0.1)',
       transform: 'translateY(-2px)'
     },
     inputError: {
@@ -204,12 +355,12 @@ export const RegisterPage: React.FC = () => {
       borderRadius: '8px'
     },
     iconHover: {
-      color: '#2C5530',
-      backgroundColor: 'rgba(44, 85, 48, 0.1)'
+      color: '#8B4513',
+      backgroundColor: 'rgba(139, 69, 19, 0.1)'
     },
     button: {
       width: '100%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       color: 'white',
       padding: '20px 32px',
       fontSize: '18px',
@@ -218,17 +369,17 @@ export const RegisterPage: React.FC = () => {
       borderRadius: '16px',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
-      boxShadow: '0 8px 24px rgba(44, 85, 48, 0.3)',
+      boxShadow: '0 8px 24px rgba(205, 133, 63, 0.3)',
       position: 'relative' as const,
       overflow: 'hidden'
     },
     buttonHover: {
       transform: 'translateY(-2px)',
-      boxShadow: '0 12px 32px rgba(44, 85, 48, 0.4)'
+      boxShadow: '0 12px 32px rgba(139, 69, 19, 0.4)'
     },
     buttonActive: {
       transform: 'translateY(0)',
-      boxShadow: '0 4px 16px rgba(44, 85, 48, 0.3)'
+      boxShadow: '0 4px 16px rgba(139, 69, 19, 0.3)'
     },
     buttonDisabled: {
       width: '100%',
@@ -271,7 +422,7 @@ export const RegisterPage: React.FC = () => {
     },
     strengthLabel: {
       fontSize: '14px',
-      color: '#64748b',
+      color: '#555555',
       fontWeight: '500'
     },
     strengthValue: {
@@ -320,31 +471,34 @@ export const RegisterPage: React.FC = () => {
     },
     linkText: {
       fontSize: '16px',
-      color: '#64748b',
+      color: '#555555',
       marginBottom: '20px',
       lineHeight: '1.5'
     },
     link: {
-      color: '#D35400',
+      color: '#CD853F',
       textDecoration: 'none',
       fontWeight: '600',
       transition: 'all 0.2s ease',
       padding: '4px 8px',
       borderRadius: '8px',
-      marginLeft: '4px'
+      marginLeft: '4px',
+      border: '1px solid #000000',
+      backgroundColor: 'transparent'
     },
     linkHover: {
-      color: '#B03A00',
-      backgroundColor: 'rgba(211, 84, 0, 0.1)'
+      color: '#CD853F',
+      backgroundColor: 'rgba(205, 133, 63, 0.1)',
+      border: '1px solid #000000'
     },
     backButton: {
-      color: '#2C5530',
+      color: '#CD853F',
       textDecoration: 'none',
       fontWeight: '600',
       transition: 'all 0.2s ease',
       padding: '8px 16px',
       borderRadius: '12px',
-      border: '2px solid #2C5530',
+      border: '2px solid #000000',
       backgroundColor: 'white',
       cursor: 'pointer',
       fontSize: '14px'
@@ -374,9 +528,7 @@ export const RegisterPage: React.FC = () => {
       >
           {/* Header */}
         <div style={styles.header}>
-          <div style={styles.logo}>
-            <ChefHat size={40} color="white" />
-          </div>
+          <Logo size={80} />
           <h1 style={styles.title}>Crie sua Conta</h1>
           </div>
 
@@ -401,6 +553,7 @@ export const RegisterPage: React.FC = () => {
                   ...(nameFocused ? styles.inputFocus : {})
                 }}
                 required
+                title="Por favor, preencha este campo"
               />
               <User 
                 size={22} 
@@ -412,7 +565,7 @@ export const RegisterPage: React.FC = () => {
             </div>
             <p style={{
               fontSize: '12px',
-              color: '#64748b',
+              color: '#555555',
               marginTop: '6px',
               fontStyle: 'italic',
               lineHeight: '1.4'
@@ -434,12 +587,13 @@ export const RegisterPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setEmailFocused(true)}
                 onBlur={() => setEmailFocused(false)}
-                  placeholder="seu@email.com"
+                placeholder="seu@email.com"
                 style={{
                   ...styles.inputWithIcon,
                   ...(emailFocused ? styles.inputFocus : {})
                 }}
-                  required
+                required
+                title="Por favor, preencha este campo"
                 />
               <Mail 
                 size={22} 
@@ -469,7 +623,8 @@ export const RegisterPage: React.FC = () => {
                   ...styles.inputWithIcon,
                   ...(passwordFocused ? styles.inputFocus : {})
                 }}
-                  required
+                required
+                title="Por favor, preencha este campo"
                 />
                 <button
                   type="button"
@@ -550,7 +705,8 @@ export const RegisterPage: React.FC = () => {
                   ...(confirmPasswordFocused ? styles.inputFocus : {}),
                   ...(confirmPassword && password !== confirmPassword ? styles.inputError : {})
                 }}
-                  required
+                required
+                title="Por favor, preencha este campo"
                 />
                 <button
                   type="button"

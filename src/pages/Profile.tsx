@@ -21,7 +21,7 @@ import {
 
 
 export const Profile: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [profile, setProfile] = useState<UserProfileRow | null>(null)
   const { stats } = useUserStats()
@@ -251,15 +251,22 @@ export const Profile: React.FC = () => {
                     gap: '8px',
                   }}>
                     <div style={{
-                      background: `linear-gradient(135deg, ${colors.primary}20, ${colors.secondary}20)`,
-                      color: colors.primary,
+                      background: theme === 'dark' 
+                        ? `linear-gradient(135deg, rgba(44, 85, 48, 0.9), rgba(17, 94, 89, 0.9))`
+                        : `linear-gradient(135deg, ${colors.primary}20, ${colors.secondary}20)`,
+                      color: theme === 'dark' ? "rgb(205, 133, 63)" : "#8B4513",
                       fontSize: fontSizes.xs,
                       fontWeight: 700,
                       padding: '4px 8px',
                       borderRadius: '12px',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      border: `1px solid ${colors.primary}30`,
+                      border: theme === 'dark' 
+                        ? '1px solid rgba(205, 133, 63, 0.4)'
+                        : `1px solid ${colors.primary}30`,
+                      boxShadow: theme === 'dark' 
+                        ? '0 2px 8px rgba(0, 0, 0, 0.3)'
+                        : 'none',
                     }}>
                       Nível {getLevelNumber(stats?.total_points || 0)}
                     </div>
@@ -267,7 +274,7 @@ export const Profile: React.FC = () => {
                   
                   {/* Nome do usuário */}
                   <div style={{ 
-                    color: colors.primary, 
+                    color: '#2C5530', 
                     fontWeight: 800, 
                     fontSize: fontSizes.lg,
                     display: 'flex',
@@ -316,11 +323,11 @@ export const Profile: React.FC = () => {
 
             {/* Seções de navegação modernas */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 16, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               display: 'grid', 
               gap: 12
             }}>
@@ -331,6 +338,7 @@ export const Profile: React.FC = () => {
                 onClick={()=>navigate('/notifications')} 
                 colors={colors} 
                 fontSizes={fontSizes} 
+                theme={theme}
               />
               <NavItem 
                 icon={<Settings size={20} />} 
@@ -339,6 +347,7 @@ export const Profile: React.FC = () => {
                 onClick={()=>navigate('/preferences')} 
                 colors={colors} 
                 fontSizes={fontSizes} 
+                theme={theme}
               />
               <NavItem 
                 icon={<Shield size={20} />} 
@@ -347,6 +356,7 @@ export const Profile: React.FC = () => {
                 onClick={()=>navigate('/privacy')} 
                 colors={colors} 
                 fontSizes={fontSizes} 
+                theme={theme}
               />
               <NavItem 
                 icon={<HelpCircle size={20} />} 
@@ -355,6 +365,7 @@ export const Profile: React.FC = () => {
                 onClick={()=>navigate('/help')} 
                 colors={colors} 
                 fontSizes={fontSizes} 
+                theme={theme}
               />
             </div>
 
@@ -365,9 +376,9 @@ export const Profile: React.FC = () => {
                 style={{ 
                   padding: '16px 20px', 
                   borderRadius: 16, 
-                  border: `2px solid ${colors.primary}`, 
+                  border: `2px solid #2C5530`, 
                   background: 'white',
-                  color: colors.primary, 
+                  color: '#2C5530', 
                   cursor: 'pointer', 
                   fontSize: fontSizes.base,
                   fontWeight: 600,
@@ -379,14 +390,14 @@ export const Profile: React.FC = () => {
                   boxShadow: '0 4px 16px rgba(44,85,48,0.1)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = colors.primary;
+                  e.currentTarget.style.background = '#2C5530';
                   e.currentTarget.style.color = 'white';
                   e.currentTarget.style.transform = 'translateY(-2px)';
                   e.currentTarget.style.boxShadow = '0 8px 24px rgba(44,85,48,0.2)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'white';
-                  e.currentTarget.style.color = colors.primary;
+                  e.currentTarget.style.color = '#2C5530';
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 4px 16px rgba(44,85,48,0.1)';
                 }}
@@ -445,8 +456,9 @@ interface NavItemProps {
   onClick: ()=>void;
   colors: any;
   fontSizes: any;
+  theme: 'light' | 'dark';
 }
-const NavItem: React.FC<NavItemProps> = ({ icon, title, subtitle, onClick, colors, fontSizes }) => {
+const NavItem: React.FC<NavItemProps> = ({ icon, title, subtitle, onClick, colors, fontSizes, theme }) => {
   return (
     <button 
       onClick={onClick} 
@@ -455,25 +467,25 @@ const NavItem: React.FC<NavItemProps> = ({ icon, title, subtitle, onClick, color
         alignItems: 'center', 
         justifyContent: 'space-between', 
         width: '100%', 
-        background: 'white',
-        border: '1px solid rgba(44,85,48,0.1)', 
+        background: theme === 'dark' ? '#1a1a1a' : 'white',
+        border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)', 
         borderRadius: 16, 
         padding: '16px 20px', 
         cursor: 'pointer',
         transition: 'all 0.3s ease',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+        boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 2px 8px rgba(0,0,0,0.04)'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = colors.accent;
+        e.currentTarget.style.background = theme === 'dark' ? '#2d2d2d' : colors.accent;
         e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 8px 24px rgba(44,85,48,0.15)';
+        e.currentTarget.style.boxShadow = theme === 'dark' ? '0 8px 24px rgba(55, 65, 81, 0.25)' : '0 8px 24px rgba(44,85,48,0.15)';
         e.currentTarget.style.borderColor = colors.primary;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'white';
+        e.currentTarget.style.background = theme === 'dark' ? '#1a1a1a' : 'white';
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
-        e.currentTarget.style.borderColor = 'rgba(44,85,48,0.1)';
+        e.currentTarget.style.boxShadow = theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 2px 8px rgba(0,0,0,0.04)';
+        e.currentTarget.style.borderColor = theme === 'dark' ? '#374151' : 'rgba(44,85,48,0.1)';
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -492,7 +504,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, title, subtitle, onClick, color
         </div>
         <div style={{ textAlign: 'left' }}>
           <div style={{ 
-            color: colors.text, 
+            color: theme === 'dark' ? '#CD853F' : colors.text, 
             fontWeight: 700, 
             fontSize: fontSizes.base,
             marginBottom: 2
@@ -500,14 +512,14 @@ const NavItem: React.FC<NavItemProps> = ({ icon, title, subtitle, onClick, color
             {title}
           </div>
           <div style={{ 
-            color: colors.textSecondary, 
+            color: theme === 'dark' ? '#f9fafb' : colors.textSecondary, 
             fontSize: fontSizes.sm 
           }}>
             {subtitle}
           </div>
         </div>
       </div>
-      <ChevronRight size={20} color={colors.textSecondary} />
+      <ChevronRight size={20} color={theme === 'dark' ? '#d1d5db' : colors.textSecondary} />
     </button>
   )
 }

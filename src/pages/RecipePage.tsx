@@ -24,7 +24,7 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const { savedRecipeIds, toggleSaved } = useSavedRecipes();
-  const { colors, fontSizes } = useAppPreferences();
+  const { colors, fontSizes, theme } = useAppPreferences();
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -146,7 +146,7 @@ export default function RecipePage() {
               borderRadius: '50%', 
               border: 'none', 
               background: 'rgba(255, 255, 255, 0.95)', 
-              color: colors.text, 
+              color: theme === 'dark' ? '#CD853F' : '#2F2F2F', 
               cursor: 'pointer', 
               display: 'flex',
               alignItems: 'center',

@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Mail, ChefHat } from 'lucide-react'
+import { Mail } from 'lucide-react'
+import { Logo } from '../components/Logo'
 import { toast } from 'sonner'
+import { toastStyles } from '../lib/toastStyles'
 
 export const ForgotPasswordPage: React.FC = () => {
   const navigate = useNavigate()
@@ -21,7 +23,7 @@ export const ForgotPasswordPage: React.FC = () => {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '24px',
-      background: 'linear-gradient(135deg, #F5F0E5 0%, #E8E0D0 100%)',
+      background: 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 100%)',
       fontFamily: 'Nunito, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", sans-serif'
     },
     card: {
@@ -29,7 +31,7 @@ export const ForgotPasswordPage: React.FC = () => {
       maxWidth: '480px',
       background: 'rgba(255, 255, 255, 0.95)',
       borderRadius: '24px',
-      boxShadow: '0 20px 60px rgba(44, 85, 48, 0.15), 0 8px 32px rgba(0, 0, 0, 0.08)',
+      boxShadow: '0 20px 60px rgba(139, 69, 19, 0.15), 0 8px 32px rgba(0, 0, 0, 0.08)',
       padding: '40px',
       backdropFilter: 'blur(20px)',
       border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -43,23 +45,23 @@ export const ForgotPasswordPage: React.FC = () => {
       width: '80px',
       height: '80px',
       borderRadius: '50%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       margin: '0 auto 24px auto',
-      boxShadow: '0 12px 32px rgba(44, 85, 48, 0.4)',
+      boxShadow: '0 12px 32px rgba(139, 69, 19, 0.4)',
       animation: 'pulse 2s infinite'
     },
     title: {
       fontSize: '32px',
       fontWeight: 800,
-      color: '#2C5530',
+      color: '#CD853F',
       margin: '0 0 12px 0',
       lineHeight: '1.2'
     },
     subtitle: {
-      color: '#64748b',
+      color: '#555555',
       fontSize: '16px',
       lineHeight: '1.6',
       margin: 0
@@ -75,7 +77,7 @@ export const ForgotPasswordPage: React.FC = () => {
     label: {
       fontSize: '14px',
       fontWeight: 600,
-      color: '#2C5530',
+      color: '#8B4513',
       marginBottom: '4px'
     },
     inputContainer: {
@@ -88,7 +90,7 @@ export const ForgotPasswordPage: React.FC = () => {
       border: '2px solid #e2e8f0',
       borderRadius: '16px',
       background: '#f8fafc',
-      color: '#1f2937',
+      color: '#2F2F2F',
       transition: 'all 0.3s ease',
       outline: 'none',
       boxSizing: 'border-box' as const
@@ -100,15 +102,15 @@ export const ForgotPasswordPage: React.FC = () => {
       border: '2px solid #e2e8f0',
       borderRadius: '16px',
       background: '#f8fafc',
-      color: '#1f2937',
+      color: '#2F2F2F',
       transition: 'all 0.3s ease',
       outline: 'none',
       boxSizing: 'border-box' as const
     },
     inputFocus: {
-      border: '2px solid #2C5530',
+      border: '2px solid #CD853F',
       background: '#ffffff',
-      boxShadow: '0 0 0 4px rgba(44, 85, 48, 0.1)',
+      boxShadow: '0 0 0 4px rgba(205, 133, 63, 0.1)',
       transform: 'translateY(-2px)'
     },
     iconRight: {
@@ -124,7 +126,7 @@ export const ForgotPasswordPage: React.FC = () => {
     },
     button: {
       width: '100%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       color: 'white',
       padding: '18px 32px',
       fontSize: '18px',
@@ -184,7 +186,7 @@ export const ForgotPasswordPage: React.FC = () => {
     link: {
       background: 'transparent',
       border: 'none',
-      color: '#D35400',
+      color: '#CD853F',
       fontSize: '14px',
       fontWeight: 600,
       cursor: 'pointer',
@@ -194,13 +196,13 @@ export const ForgotPasswordPage: React.FC = () => {
       borderRadius: '8px'
     },
     linkHover: {
-      color: '#B7410E',
-      backgroundColor: 'rgba(211, 84, 0, 0.1)'
+      color: '#CD853F',
+      backgroundColor: 'rgba(205, 133, 63, 0.1)'
     },
     backButton: {
       background: 'transparent',
-      border: '2px solid #2C5530',
-      color: '#2C5530',
+      border: '2px solid #CD853F',
+      color: '#CD853F',
       fontSize: '14px',
       fontWeight: 600,
       cursor: 'pointer',
@@ -214,8 +216,8 @@ export const ForgotPasswordPage: React.FC = () => {
       margin: '0 auto'
     },
     backButtonHover: {
-      backgroundColor: '#2C5530',
-      border: '2px solid #2C5530',
+      backgroundColor: '#CD853F',
+      border: '2px solid #CD853F',
       color: 'white'
     }
   }), [])
@@ -227,7 +229,32 @@ export const ForgotPasswordPage: React.FC = () => {
     e.preventDefault()
     
     if (!email) {
-      toast.error('Por favor, insira seu e-mail')
+      toast.error('Por favor, insira seu e-mail', {
+        className: 'toast-forgot-password-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
       return
     }
 
@@ -238,12 +265,61 @@ export const ForgotPasswordPage: React.FC = () => {
       
       if (result.success) {
         setSubmitted(true)
-        toast.success('Link de recuperação enviado com sucesso!')
       } else {
-        toast.error(result.message || 'Falha ao enviar link de recuperação')
+        toast.error(result.message || 'Falha ao enviar link de recuperação', {
+          className: 'toast-forgot-password-error',
+          style: {
+            background: 'white',
+            color: '#2F2F2F',
+            border: '1px solid #E0E0E0',
+            borderRadius: '12px',
+            padding: '16px 24px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            maxWidth: '380px',
+            minWidth: '300px',
+            margin: '0 auto',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            lineHeight: '1.4',
+            letterSpacing: '0.01em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            width: '100%'
+          }
+        })
       }
     } catch (error) {
-      toast.error('Erro interno ao processar solicitação')
+      toast.error('Erro interno ao processar solicitação', {
+        className: 'toast-forgot-password-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%'
+        }
+      })
     } finally {
       setLoading(false)
     }
@@ -291,13 +367,12 @@ export const ForgotPasswordPage: React.FC = () => {
       >
         {/* Header */}
         <div style={styles.header}>
-          <div style={styles.logo}>
-            <ChefHat size={40} color="white" />
-          </div>
+          <Logo size={80} />
           <h1 style={styles.title}>Esqueceu sua senha?</h1>
           <p style={styles.subtitle}>
             Sem problemas!<br />
-            Enviaremos um link para seu e-mail
+            Enviaremos um link para seu<br />
+            e-mail
           </p>
         </div>
 
@@ -403,8 +478,8 @@ export const ForgotPasswordPage: React.FC = () => {
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent'
-              e.currentTarget.style.border = '2px solid #2C5530'
-              e.currentTarget.style.color = '#2C5530'
+              e.currentTarget.style.border = '2px solid #D35400'
+              e.currentTarget.style.color = '#D35400'
             }}
           >
             ← Voltar ao login

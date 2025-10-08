@@ -151,7 +151,7 @@ export const Saved: React.FC = () => {
         
         {/* Título principal */}
         <h1 style={{
-          color: colors.primary,
+          color: "#8B4513",
           fontSize: fontSizes['3xl'],
           fontWeight: '800',
           letterSpacing: '-0.02em',

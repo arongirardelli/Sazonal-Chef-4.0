@@ -65,6 +65,7 @@ class UnitConverter {
     'acafrao da terra': 12, // 1 colher = 12g
     'açafrão': 12, // 1 colher = 12g
     'acafrao': 12, // 1 colher = 12g
+    'cebolinha': 6, // 1 colher de sopa = 6g = 1 talo
   }
 
   /**
@@ -179,6 +180,10 @@ class UnitConverter {
     }
     if (u === 'lata' && n.includes('atum')) {
       return { quantity: quantity * 120, unit: 'g', sourceUnit: u, sourceQtyOriginal: quantity }
+    }
+    // CORREÇÃO: Cebolinha em talos - 1 talo = 6g
+    if ((u === 'talo' || u === 'talos' || u === 'unidades') && n.includes('cebolinha')) {
+      return { quantity: quantity * 6, unit: 'g', sourceUnit: u, sourceQtyOriginal: quantity }
     }
     
     // Conversões específicas para tamanhos de ingredientes

@@ -5,7 +5,7 @@ import { BottomNav } from '../components/BottomNav'
 import { ArrowLeft, Shield, Lock, Eye, EyeOff, Trash2, Download, AlertTriangle, CheckCircle, Sparkles, ExternalLink } from 'lucide-react'
 
 export const PrivacySecurity: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [openAccordion, setOpenAccordion] = useState<number | null>(null)
 
@@ -25,14 +25,34 @@ export const PrivacySecurity: React.FC = () => {
           </p>
           
           <div style={{ marginLeft: '16px' }}>
-            <div style={{ marginBottom: '12px' }}>
-              <strong style={{ color: colors.primary }}>Seu E-mail:</strong> É a chave da sua cozinha, usado apenas para o login e para recuperarmos sua senha caso você a esqueça.
+            <div style={{
+              background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'rgb(248, 248, 248)',
+              padding: '16px',
+              borderRadius: '12px',
+              border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgb(224, 224, 224)',
+              marginTop: '16px',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Seu E-mail:</strong> É a chave da sua cozinha, usado apenas para o login e para recuperarmos sua senha caso você a esqueça.
             </div>
-            <div style={{ marginBottom: '12px' }}>
-              <strong style={{ color: colors.primary }}>Suas Preferências:</strong> As receitas que você salva e os filtros que mais usa nos ajudam a entender seu paladar, para que possamos sugerir pratos que você realmente vai amar.
+            <div style={{
+              background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'rgb(248, 248, 248)',
+              padding: '16px',
+              borderRadius: '12px',
+              border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgb(224, 224, 224)',
+              marginTop: '16px',
+              marginBottom: '12px'
+            }}>
+              <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Suas Preferências:</strong> As receitas que você salva e os filtros que mais usa nos ajudam a entender seu paladar, para que possamos sugerir pratos que você realmente vai amar.
             </div>
-            <div>
-              <strong style={{ color: colors.primary }}>Seu Histórico no App:</strong> Saber como você usa o app nos ajuda a deixá-lo cada vez melhor, mais rápido e mais inteligente. É como provar o prato durante o preparo para ajustar o tempero!
+            <div style={{
+              background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'rgb(248, 248, 248)',
+              padding: '16px',
+              borderRadius: '12px',
+              border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgb(224, 224, 224)',
+              marginTop: '16px'
+            }}>
+              <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Seu Histórico no App:</strong> Saber como você usa o app nos ajuda a deixá-lo cada vez melhor, mais rápido e mais inteligente. É como provar o prato durante o preparo para ajustar o tempero!
             </div>
           </div>
         </div>
@@ -59,7 +79,7 @@ export const PrivacySecurity: React.FC = () => {
             border: `1px solid ${colors.border}`,
             marginTop: '16px'
           }}>
-            <strong style={{ color: colors.primary }}>Nossa promessa:</strong> Nunca, jamais, venderemos ou compartilharemos seus dados pessoais com empresas de marketing. Receita de família a gente não compartilha com estranhos.
+            <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Nossa promessa:</strong> Nunca, jamais, venderemos ou compartilharemos seus dados pessoais com empresas de marketing. Receita de família a gente não compartilha com estranhos.
           </div>
         </div>
       )
@@ -68,11 +88,24 @@ export const PrivacySecurity: React.FC = () => {
       trigger: "🔒 O cofre da nossa despensa",
       content: (
         <div>
-          <div style={{ marginBottom: '12px' }}>
-            <strong style={{ color: colors.primary }}>Tecnologia de Ponta:</strong> Usamos criptografia forte para proteger suas informações. Pense nisso como o melhor cadeado para a porta da sua cozinha.
+          <div style={{
+            background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'rgb(248, 248, 248)',
+            padding: '16px',
+            borderRadius: '12px',
+            border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgb(224, 224, 224)',
+            marginTop: '16px',
+            marginBottom: '12px'
+          }}>
+            <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Tecnologia de Ponta:</strong> Usamos criptografia forte para proteger suas informações. Pense nisso como o melhor cadeado para a porta da sua cozinha.
           </div>
-          <div>
-            <strong style={{ color: colors.primary }}>Você no Controle:</strong> Sua conta é sua. A qualquer momento, você pode acessá-la, editá-la ou, se um dia nos disser adeus, pode excluir sua conta e todos os dados associados permanentemente. Sem pegadinhas.
+          <div style={{
+            background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'rgb(248, 248, 248)',
+            padding: '16px',
+            borderRadius: '12px',
+            border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgb(224, 224, 224)',
+            marginTop: '16px'
+          }}>
+            <strong style={{ color: theme === 'dark' ? '#CD853F' : '#2C5530' }}>Você no Controle:</strong> Sua conta é sua. A qualquer momento, você pode acessá-la, editá-la ou, se um dia nos disser adeus, pode excluir sua conta e todos os dados associados permanentemente. Sem pegadinhas.
           </div>
         </div>
       )
@@ -214,11 +247,11 @@ export const PrivacySecurity: React.FC = () => {
             
             {/* Card Principal */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -246,7 +279,7 @@ export const PrivacySecurity: React.FC = () => {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -258,7 +291,7 @@ export const PrivacySecurity: React.FC = () => {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -300,7 +333,7 @@ export const PrivacySecurity: React.FC = () => {
                     borderRadius: 16,
                     overflow: 'hidden',
                     border: `1px solid ${openAccordion === index ? colors.primary : 'rgba(44,85,48,0.1)'}`,
-                    background: openAccordion === index ? `${colors.primary}05` : 'white',
+                    background: openAccordion === index ? `${colors.primary}05` : (theme === 'dark' ? '#1a1a1a' : 'white'),
                     transition: 'all 0.3s ease',
                     boxShadow: openAccordion === index ? '0 8px 24px rgba(44,85,48,0.1)' : '0 2px 8px rgba(0,0,0,0.04)'
                   }}>
@@ -375,11 +408,11 @@ export const PrivacySecurity: React.FC = () => {
 
             {/* Link para Política Completa */}
             <div style={{
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               textAlign: 'center',
               position: 'relative',
               overflow: 'hidden'
@@ -401,7 +434,7 @@ export const PrivacySecurity: React.FC = () => {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase'
 import { getShoppingSource } from '@/services/menuService'
 import { buildShoppingList, type ShoppingList as ShoppingListType } from '@/lib/shoppingListBuilder'
 import { toast } from 'sonner'
+import { toastStyles } from '../lib/toastStyles'
 import { useAppPreferences } from '../contexts/AppPreferencesContext'
 import { ShoppingCart, ArrowLeft, CheckCircle, ChefHat, Sparkles, Package, Leaf, Droplets, Wheat } from 'lucide-react'
 
@@ -13,7 +14,7 @@ interface CheckedItemsState {
 }
 
 export const ShoppingList: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [userId, setUserId] = useState<string | null>(null)
   const [view, setView] = useState<ShoppingListType | null>(null)
@@ -103,7 +104,9 @@ export const ShoppingList: React.FC = () => {
   const clearAllChecked = () => {
     setCheckedItems({})
     saveCheckedItems({}, currentMenuId)
-    toast.success('Lista de compras resetada!')
+    toast('✅ Lista de compras resetada!', {
+      style: toastStyles.success
+    })
   }
 
   useEffect(() => {
@@ -177,15 +180,15 @@ export const ShoppingList: React.FC = () => {
   const getCategoryIcon = (category: string) => {
     const categoryLower = category.toLowerCase()
     if (categoryLower.includes('hortifruti') || categoryLower.includes('vegetais') || categoryLower.includes('frutas')) {
-      return <Leaf size={20} color={colors.primary} />
+      return <Leaf size={20} color="#8B4513" />
     } else if (categoryLower.includes('carnes') || categoryLower.includes('proteína')) {
-      return <Package size={20} color={colors.primary} />
+      return <Package size={20} color="#8B4513" />
     } else if (categoryLower.includes('laticínios') || categoryLower.includes('leite')) {
-      return <Droplets size={20} color={colors.primary} />
+      return <Droplets size={20} color="#8B4513" />
     } else if (categoryLower.includes('padaria') || categoryLower.includes('pão')) {
-      return <Wheat size={20} color={colors.primary} />
+      return <Wheat size={20} color="#8B4513" />
     } else {
-      return <ShoppingCart size={20} color={colors.primary} />
+      return <ShoppingCart size={20} color="#8B4513" />
     }
   }
 
@@ -241,7 +244,7 @@ export const ShoppingList: React.FC = () => {
             right: '-50px',
             width: '100px',
             height: '100px',
-            background: `radial-gradient(circle, ${colors.primary}10 0%, transparent 70%)`,
+            background: `radial-gradient(circle, #8B451310 0%, transparent 70%)`,
             borderRadius: '50%',
             opacity: 0.6,
             animation: 'float 6s ease-in-out infinite'
@@ -269,12 +272,12 @@ export const ShoppingList: React.FC = () => {
               <div style={{
                 width: '4px',
                 height: '32px',
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                background: `linear-gradient(135deg, #8B4513 0%, ${colors.secondary} 100%)`,
                 borderRadius: '2px'
               }} />
-              <ShoppingCart size={24} color={colors.primary} />
+              <ShoppingCart size={24} color="#8B4513" />
               <h1 style={{
-                color: colors.primary,
+                color: '#8B4513',
                 fontSize: fontSizes['3xl'],
                 fontWeight: 800,
                 margin: 0,
@@ -283,26 +286,30 @@ export const ShoppingList: React.FC = () => {
               }}>
                 Lista de Compras
               </h1>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: `linear-gradient(135deg, ${colors.primary}15 0%, ${colors.secondary}15 100%)`,
-                padding: '8px 16px',
-                borderRadius: '12px',
-                border: `1px solid ${colors.primary}30`,
-                marginLeft: 'auto'
-              }}>
-                <ChefHat size={20} color={colors.primary} />
-                <span style={{
-                  fontSize: fontSizes.sm,
-                  fontWeight: 600,
-                  color: colors.primary
-                }}>
-                  {menuName}
-                </span>
-              </div>
             </div>
+            
+            {/* Div do nome do cardápio */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: `linear-gradient(135deg, #8B451315 0%, ${colors.secondary}15 100%)`,
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: `1px solid #8B451330`,
+              marginTop: '12px',
+              alignSelf: 'flex-start'
+            }}>
+              <ChefHat size={20} color="#8B4513" />
+              <span style={{
+                fontSize: fontSizes.sm,
+                fontWeight: 600,
+                color: '#8B4513'
+              }}>
+                {menuName}
+              </span>
+            </div>
+            
             <p style={{
               fontSize: fontSizes.lg,
               color: colors.textSecondary,
@@ -317,14 +324,16 @@ export const ShoppingList: React.FC = () => {
         </div>
 
         {/* Mensagem do Chef Modernizada */}
-        <div style={{
-          background: `linear-gradient(135deg, #f0fdfa 0%, #ecfdf5 50%, #f0fdfa 100%)`,
-          border: `2px solid #14b8a6`,
-          color: '#115e59',
+        <div style={{ 
+          background: theme === 'dark' 
+            ? `linear-gradient(135deg, #F5F5DC 0%, #F8F8F8 100%)` 
+            : `linear-gradient(135deg, ${colors.background} 0%, ${colors.accent} 100%)`,
+          border: `2px solid #2C5530`,
+          color: '#2C5530',
           padding: '24px',
           borderRadius: '16px',
           marginBottom: '32px',
-          boxShadow: '0 4px 20px rgba(20, 184, 166, 0.15)',
+          boxShadow: '0 4px 20px rgba(44, 85, 48, 0.15)',
           position: 'relative',
           overflow: 'hidden'
         }} role="alert">
@@ -335,7 +344,7 @@ export const ShoppingList: React.FC = () => {
             right: '-20px',
             width: '40px',
             height: '40px',
-            background: `radial-gradient(circle, #14b8a620 0%, transparent 70%)`,
+            background: `radial-gradient(circle, #2C553020 0%, transparent 70%)`,
             borderRadius: '50%',
             opacity: 0.6
           }} />
@@ -351,10 +360,11 @@ export const ShoppingList: React.FC = () => {
                 width: '48px',
                 height: '48px',
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)`,
+                background: '#2C5530',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                boxShadow: '0 4px 16px rgba(44,85,48,0.3)'
               }}>
                 <ChefHat size={24} color="white" />
               </div>
@@ -421,11 +431,11 @@ export const ShoppingList: React.FC = () => {
             onClick={()=>navigate('/menu')} 
             style={{ 
               padding: '12px 20px', 
-              border: `2px solid ${colors.primary}`, 
+              border: `2px solid #8B4513`, 
               background: 'transparent', 
               borderRadius: '12px', 
               cursor: 'pointer', 
-              color: colors.primary, 
+              color: '#8B4513', 
               fontSize: fontSizes.sm,
               fontWeight: 600,
               display: 'flex',
@@ -434,7 +444,7 @@ export const ShoppingList: React.FC = () => {
               transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = colors.primary
+              e.currentTarget.style.background = '#8B4513'
               e.currentTarget.style.color = colors.surface
             }}
             onMouseLeave={(e) => {
@@ -501,7 +511,7 @@ export const ShoppingList: React.FC = () => {
                 width: '64px',
                 height: '64px',
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.primary}20 100%)`,
+                background: `linear-gradient(135deg, ${colors.accent} 0%, #8B451320 100%)`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -537,7 +547,7 @@ export const ShoppingList: React.FC = () => {
                     right: '-20px',
                     width: '40px',
                     height: '40px',
-                    background: `radial-gradient(circle, ${colors.primary}10 0%, transparent 70%)`,
+                    background: `radial-gradient(circle, #8B451310 0%, transparent 70%)`,
                     borderRadius: '50%',
                     opacity: 0.6
                   }} />
@@ -552,13 +562,13 @@ export const ShoppingList: React.FC = () => {
                       <div style={{
                         width: '4px',
                         height: '24px',
-                        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+                        background: `linear-gradient(135deg, #8B4513 0%, ${colors.secondary} 100%)`,
                         borderRadius: '2px'
                       }} />
                       {getCategoryIcon(cat)}
                       <h3 style={{ 
                         margin: 0, 
-                        color: colors.primary, 
+                        color: '#8B4513', 
                         fontSize: fontSizes.xl,
                         fontWeight: 700
                       }}>
@@ -596,10 +606,10 @@ export const ShoppingList: React.FC = () => {
                             onClick={() => toggleItem(itemKey)}
                             onMouseEnter={(e) => {
                               if (!isChecked) {
-                                e.currentTarget.style.background = `linear-gradient(135deg, ${colors.primary}10 0%, ${colors.accent} 100%)`
-                                e.currentTarget.style.borderColor = colors.primary
+                                e.currentTarget.style.background = `linear-gradient(135deg, #8B451310 0%, ${colors.accent} 100%)`
+                                e.currentTarget.style.borderColor = '#8B4513'
                                 e.currentTarget.style.transform = 'translateY(-2px)'
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${colors.primary}20`
+                                e.currentTarget.style.boxShadow = `0 4px 12px #8B451320`
                               }
                             }}
                             onMouseLeave={(e) => {
@@ -624,7 +634,7 @@ export const ShoppingList: React.FC = () => {
                                 style={{ 
                                   width: '20px', 
                                   height: '20px',
-                                  accentColor: colors.primary,
+                                  accentColor: '#8B4513',
                                   cursor: 'pointer'
                                 }}
                               />
@@ -684,7 +694,7 @@ export const ShoppingList: React.FC = () => {
                     <div style={{
                       width: '4px',
                       height: '24px',
-                      background: `linear-gradient(135deg, ${colors.secondary} 0%, ${colors.primary} 100%)`,
+                      background: `linear-gradient(135deg, ${colors.secondary} 0%, #8B4513 100%)`,
                       borderRadius: '2px'
                     }} />
                     <Sparkles size={20} color={colors.secondary} />
@@ -783,7 +793,7 @@ export const ShoppingList: React.FC = () => {
 
             {/* Resumo Final */}
             <div style={{ 
-              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`, 
+              background: `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`, 
               color: colors.surface, 
               padding: '24px', 
               borderRadius: '16px', 

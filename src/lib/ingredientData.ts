@@ -29,12 +29,13 @@ export const ingredientMasterDictionary: Record<string, IngredientData> = {
   'pepino': { primaryUnit: 'unidade', averageWeightGrams: 250, category: 'Hortifruti' }, // 250g - AJUSTADO
   'alface': { primaryUnit: 'maço', averageWeightGrams: 250, category: 'Hortifruti' }, // 250g por maço (25 folhas)
   'folha de alface': { primaryUnit: 'folha', averageWeightGrams: 10, category: 'Hortifruti' }, // 10g por folha
-  'cebolinha': { primaryUnit: 'maço', averageWeightGrams: 100, category: 'Hortifruti' },
+  'cebolinha': { primaryUnit: 'talo', averageWeightGrams: 6, category: 'Hortifruti' }, // 1 talo = 6g = 1 colher de sopa
   'cenoura': { primaryUnit: 'unidade', averageWeightGrams: 120, category: 'Hortifruti' }, // 120g - TABELA PADRONIZADA
   'batata': { primaryUnit: 'unidade', averageWeightGrams: 150, category: 'Hortifruti' },
   'batata doce': { primaryUnit: 'unidade', averageWeightGrams: 200, category: 'Hortifruti' }, // 200g - TABELA PADRONIZADA
   'tomate': { primaryUnit: 'unidade', averageWeightGrams: 120, category: 'Hortifruti' }, // 120g - AJUSTADO conforme solicitado
   'abacate': { primaryUnit: 'unidade', averageWeightGrams: 350, category: 'Hortifruti' }, // 350g - AJUSTADO conforme solicitado
+  'avocado': { primaryUnit: 'unidade', averageWeightGrams: 200, category: 'Hortifruti' }, // 200g - Tipo menor de abacate
   'manga': { primaryUnit: 'unidade', averageWeightGrams: 250, category: 'Hortifruti' }, // 250g - MANTIDO (valor realista)
   'maracujá': { primaryUnit: 'unidade', averageWeightGrams: 100, category: 'Hortifruti' }, // 100g - Fruta
   'maracuja': { primaryUnit: 'unidade', averageWeightGrams: 100, category: 'Hortifruti' }, // 100g - Fruta

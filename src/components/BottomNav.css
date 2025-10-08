@@ -4,8 +4,8 @@
   left: 0;
   right: 0;
   z-index: 50;
-  padding: 12px 0 8px 0;
-  height: 88px;
+  padding: 8px 0 6px 0;
+  height: 72px;
 }
 
 .nav-container {
@@ -14,21 +14,21 @@
   align-items: center;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 4px;
+  padding: 6px 10px;
   border: none;
   background: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 16px;
-  min-width: 64px;
+  border-radius: 12px;
+  min-width: 56px;
   position: relative;
   overflow: hidden;
 }
@@ -89,12 +89,12 @@
 /* Melhorias para dispositivos móveis */
 @media (max-width: 480px) {
   .nav-container {
-    padding: 0 16px;
+    padding: 0 12px;
   }
   
   .nav-item {
-    min-width: 56px;
-    padding: 6px 8px;
+    min-width: 48px;
+    padding: 4px 6px;
   }
   
   .icon {

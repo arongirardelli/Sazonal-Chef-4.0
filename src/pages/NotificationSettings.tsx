@@ -4,11 +4,12 @@ import { BottomNav } from '@/components/BottomNav'
 import { ArrowLeft, Bell, Sparkles, Shield, Clock, Calendar } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { toastStyles } from '@/lib/toastStyles'
 import { usePushNotifications } from '@/hooks/usePushNotifications'
 import { useAppPreferences } from '../contexts/AppPreferencesContext'
 
 export const NotificationSettings: React.FC = () => {
-  const { colors } = useAppPreferences()
+  const { colors, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [userId, setUserId] = useState<string | null>(null)
   const [settings, setSettings] = useState<any>(null)
@@ -51,7 +52,7 @@ export const NotificationSettings: React.FC = () => {
           
           if (createError) {
             console.error('Erro ao criar configurações:', createError)
-            toast.error('Erro ao criar configurações iniciais')
+            toast.error('Erro ao criar configurações iniciais', { style: toastStyles.error })
           } else {
             userSettings = newSettings
           }
@@ -59,7 +60,7 @@ export const NotificationSettings: React.FC = () => {
           console.error('Erro ao carregar configurações:', error)
           // Se for erro de conexão, não mostrar toast de erro
           if (!error.message?.includes('Failed to fetch') && !error.message?.includes('ERR_CONNECTION_CLOSED')) {
-            toast.error('Erro ao carregar configurações')
+            toast.error('Erro ao carregar configurações', { style: toastStyles.error })
           }
         }
         
@@ -77,7 +78,7 @@ export const NotificationSettings: React.FC = () => {
       console.error('Erro ao carregar configurações:', error)
       // Se for erro de conexão, não mostrar toast de erro
       if (!error.message?.includes('Failed to fetch') && !error.message?.includes('ERR_CONNECTION_CLOSED')) {
-        toast.error('Erro ao carregar configurações')
+        toast.error('Erro ao carregar configurações', { style: toastStyles.error })
       }
     }
     setLoading(false)
@@ -88,7 +89,7 @@ export const NotificationSettings: React.FC = () => {
     
     // Se o mestre está desativado, não permitir mudanças individuais
     if (!notificationsEnabled && value === true) {
-      toast.warning('Ative as notificações push primeiro para configurar notificações individuais')
+      toast.warning('Ative as notificações push primeiro para configurar notificações individuais', { style: toastStyles.warning })
       return
     }
     
@@ -111,16 +112,15 @@ export const NotificationSettings: React.FC = () => {
         setNotificationsEnabled(hasAnyEnabled || false)
       }
       
-      toast.success('Configuração atualizada!')
     } catch (error) {
       console.error('Erro ao atualizar:', error)
-      toast.error('Erro ao salvar configuração')
+      toast.error('Erro ao salvar configuração', { style: toastStyles.error })
     }
   }
 
   const handleMasterToggle = async () => {
     if (!userId) {
-      toast.error('Você precisa estar logado para configurar notificações')
+      toast.error('Você precisa estar logado para configurar notificações', { style: toastStyles.error })
       return
     }
 
@@ -145,7 +145,6 @@ export const NotificationSettings: React.FC = () => {
           await unsubscribe()
         }
         
-        toast.success('Todas as notificações foram desativadas!')
       } else {
         // Ativar todas as notificações
         const updates = [
@@ -165,22 +164,21 @@ export const NotificationSettings: React.FC = () => {
         if (isSupported && !isSubscribed) {
           const success = await subscribe()
           if (!success) {
-            toast.warning('Notificações ativadas, mas push notifications falharam. Verifique as permissões.')
+            toast.warning('Notificações ativadas, mas push notifications falharam. Verifique as permissões.', { style: toastStyles.warning })
           }
         }
         
-        toast.success('Todas as notificações foram ativadas! Agora você pode escolher quais receber.')
       }
     } catch (error) {
       console.error('Erro ao gerenciar notificações:', error)
-      toast.error('Erro ao configurar notificações')
+      toast.error('Erro ao configurar notificações', { style: toastStyles.error })
     }
   }
 
   const testPushNotification = async (type: 'seasonal' | 'daily' | 'cooking') => {
     // Verificar suporte básico de notificações
     if (!('Notification' in window)) {
-      toast.error('Este navegador não suporta notificações')
+      toast.error('Este navegador não suporta notificações', { style: toastStyles.error })
       return
     }
 
@@ -235,9 +233,9 @@ export const NotificationSettings: React.FC = () => {
           notif.close()
         }
 
-        toast.success(`Notificação de teste enviada: ${notification.title}`)
+        toast(`✔︎ Notificação de teste enviada: ${notification.title}`, { style: toastStyles.success })
       } else if (Notification.permission === 'denied') {
-        toast.error('Permissão para notificações foi negada. Ative nas configurações do navegador.')
+        toast.error('Permissão para notificações foi negada. Ative nas configurações do navegador.', { style: toastStyles.error })
       } else {
         // Solicitar permissão
         const permission = await Notification.requestPermission()
@@ -245,12 +243,12 @@ export const NotificationSettings: React.FC = () => {
           // Tentar novamente após conceder permissão
           setTimeout(() => testPushNotification(type), 100)
         } else {
-          toast.error('Permissão para notificações não foi concedida')
+          toast.error('Permissão para notificações não foi concedida', { style: toastStyles.error })
         }
       }
     } catch (error) {
       console.error('Erro ao testar notificação:', error)
-      toast.error('Erro ao enviar notificação de teste')
+      toast.error('Erro ao enviar notificação de teste', { style: toastStyles.error })
     }
   }
 
@@ -399,11 +397,11 @@ export const NotificationSettings: React.FC = () => {
             
             {/* Card principal de configurações */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -431,7 +429,7 @@ export const NotificationSettings: React.FC = () => {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#CD853F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -443,7 +441,7 @@ export const NotificationSettings: React.FC = () => {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -451,7 +449,7 @@ export const NotificationSettings: React.FC = () => {
                   </h3>
                   <p style={{ 
                     margin: 0, 
-                    color: colors.textSecondary, 
+                    color: theme === 'dark' ? '#f9fafb' : colors.textSecondary, 
                     fontSize: '14px' 
                   }}>
                     Personalize como você recebe notificações
@@ -524,7 +522,7 @@ export const NotificationSettings: React.FC = () => {
                       width: 44,
                       height: 44,
                       borderRadius: '50%',
-                      background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                      background: '#2C5530',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -676,10 +674,8 @@ const NotificationToggle: React.FC<NotificationToggleProps> = ({
           width: 44,
           height: 44,
           borderRadius: '50%',
-          background: enabled 
-            ? `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`
-            : `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
-          color: enabled ? 'white' : colors.primary,
+          background: '#2C5530',
+          color: 'white',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

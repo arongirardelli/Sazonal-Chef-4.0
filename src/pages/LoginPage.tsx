@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Eye, EyeOff, Mail, ChefHat } from 'lucide-react'
+import { Eye, EyeOff, Mail } from 'lucide-react'
+import { Logo } from '../components/Logo'
 import { toast } from 'sonner'
+import { toastStyles } from '../lib/toastStyles'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
@@ -20,7 +22,30 @@ export const LoginPage: React.FC = () => {
     e.preventDefault()
     
     if (!email || !password) {
-      toast.error('Por favor, preencha todos os campos')
+      toast.error('Por favor, preencha todos os campos', {
+        className: 'toast-login-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      });
       return
     }
 
@@ -30,13 +55,61 @@ export const LoginPage: React.FC = () => {
       const result = await signIn(email, password)
       
       if (result.success) {
-        toast.success('Login realizado com sucesso!')
+        toast('❤️ Login realizado com sucesso!', {
+          style: toastStyles.success
+        });
         navigate(from)
       } else {
-        toast.error(result.message || 'Falha no login')
+        toast.error('Credenciais inválidas', {
+          className: 'toast-login-error',
+          style: {
+            background: 'white',
+            color: '#2F2F2F',
+            border: '1px solid #E0E0E0',
+            borderRadius: '12px',
+            padding: '16px 24px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            maxWidth: '380px',
+            minWidth: '300px',
+            margin: '0 auto',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            lineHeight: '1.4',
+            letterSpacing: '0.01em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }
+        });
       }
     } catch (error) {
-      toast.error('Erro interno no login')
+      toast.error('Erro interno no login', {
+        className: 'toast-login-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      });
     } finally {
       setLoading(false)
     }
@@ -46,7 +119,7 @@ export const LoginPage: React.FC = () => {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #F5F0E5 0%, #E8E0D0 50%, #D4C8B8 100%)',
+      background: 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 50%, #D2B48C 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -75,25 +148,21 @@ export const LoginPage: React.FC = () => {
       justifyContent: 'center',
       width: '80px',
       height: '80px',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       borderRadius: '50%',
       marginBottom: '32px',
-      boxShadow: '0 8px 24px rgba(44, 85, 48, 0.3)',
+      boxShadow: '0 8px 24px rgba(205, 133, 63, 0.3)',
       animation: 'pulse 2s infinite'
     },
     title: {
       fontSize: '32px',
       fontWeight: '800',
-      color: '#1a202c',
+      color: '#CD853F',
       marginBottom: '12px',
-      margin: '0',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
-      WebkitBackgroundClip: 'text' as const,
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
+      margin: '0'
     },
     subtitle: {
-      color: '#64748b',
+      color: '#555555',
       fontSize: '18px',
       margin: '0',
       fontWeight: '500'
@@ -108,7 +177,7 @@ export const LoginPage: React.FC = () => {
       display: 'block',
       fontSize: '16px',
       fontWeight: '600',
-      color: '#374151',
+      color: '#2F2F2F',
       marginBottom: '12px',
       transition: 'color 0.2s ease'
     },
@@ -139,9 +208,9 @@ export const LoginPage: React.FC = () => {
       backgroundColor: '#f8fafc'
     },
     inputFocus: {
-      border: '2px solid #2C5530',
+      border: '2px solid #CD853F',
       backgroundColor: 'white',
-      boxShadow: '0 0 0 4px rgba(44, 85, 48, 0.1)',
+      boxShadow: '0 0 0 4px rgba(205, 133, 63, 0.1)',
       transform: 'translateY(-2px)'
     },
     iconRight: {
@@ -156,12 +225,12 @@ export const LoginPage: React.FC = () => {
       borderRadius: '8px'
     },
     iconHover: {
-      color: '#2C5530',
-      backgroundColor: 'rgba(44, 85, 48, 0.1)'
+      color: '#8B4513',
+      backgroundColor: 'rgba(139, 69, 19, 0.1)'
     },
     button: {
       width: '100%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #CD853F 0%, #8B4513 100%)',
       color: 'white',
       padding: '20px 32px',
       fontSize: '18px',
@@ -170,17 +239,17 @@ export const LoginPage: React.FC = () => {
       borderRadius: '16px',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
-      boxShadow: '0 8px 24px rgba(44, 85, 48, 0.3)',
+      boxShadow: '0 8px 24px rgba(205, 133, 63, 0.3)',
       position: 'relative' as const,
       overflow: 'hidden'
     },
     buttonHover: {
       transform: 'translateY(-2px)',
-      boxShadow: '0 12px 32px rgba(44, 85, 48, 0.4)'
+      boxShadow: '0 12px 32px rgba(139, 69, 19, 0.4)'
     },
     buttonActive: {
       transform: 'translateY(0)',
-      boxShadow: '0 4px 16px rgba(44, 85, 48, 0.3)'
+      boxShadow: '0 4px 16px rgba(139, 69, 19, 0.3)'
     },
     buttonDisabled: {
       width: '100%',
@@ -213,12 +282,12 @@ export const LoginPage: React.FC = () => {
     },
     linkText: {
       fontSize: '16px',
-      color: '#64748b',
+      color: '#555555',
       marginBottom: '20px',
       lineHeight: '1.5'
     },
     link: {
-      color: '#D35400',
+      color: '#CD853F',
       textDecoration: 'none',
       fontWeight: '600',
       transition: 'all 0.2s ease',
@@ -227,8 +296,8 @@ export const LoginPage: React.FC = () => {
       marginLeft: '4px'
     },
     linkHover: {
-      color: '#B03A00',
-      backgroundColor: 'rgba(211, 84, 0, 0.1)'
+      color: '#CD853F',
+      backgroundColor: 'rgba(205, 133, 63, 0.1)'
     }
   }
 
@@ -248,9 +317,7 @@ export const LoginPage: React.FC = () => {
       >
         {/* Header */}
         <div style={styles.header}>
-          <div style={styles.logo}>
-            <ChefHat size={40} color="white" />
-          </div>
+          <Logo size={80} />
           <h1 style={styles.title}>Olá, Chef!</h1>
           <p style={styles.subtitle}>Bem-vindo(a) de volta ao Sazonal Chef</p>
         </div>

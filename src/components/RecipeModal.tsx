@@ -21,7 +21,7 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
   isSaved = false,
   userId
 }) => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
 
   if (!isOpen || !recipe) return null
 
@@ -116,7 +116,7 @@ export const RecipeModal: React.FC<RecipeModalProps> = ({
               borderRadius: '50%', 
               border: 'none', 
               background: 'rgba(255, 255, 255, 0.95)', 
-              color: colors.text, 
+              color: theme === 'dark' ? '#CD853F' : '#2F2F2F', 
               cursor: 'pointer', 
               display: 'flex',
               alignItems: 'center',

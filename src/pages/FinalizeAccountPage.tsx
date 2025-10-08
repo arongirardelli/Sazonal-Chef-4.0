@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChefHat, Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
+import { Logo } from '../components/Logo'
 import { toast } from 'sonner'
 import { supabase } from '@/integrations/supabase'
 
@@ -104,19 +105,19 @@ const FinalizeAccountPage: React.FC = () => {
       width: '72px',
       height: '72px',
       borderRadius: '50%',
-      backgroundColor: '#2C5530',
+      backgroundColor: '#D35400',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       margin: '0 auto 16px auto',
-      boxShadow: '0 8px 24px rgba(44,85,48,0.35)'
+      boxShadow: '0 8px 24px rgba(211,84,0,0.35)'
     },
-    title: { fontSize: '28px', fontWeight: 800, color: '#2C5530', margin: '0 0 8px 0' },
+    title: { fontSize: '28px', fontWeight: 800, color: '#D35400', margin: '0 0 8px 0' },
     subtitle: { color: '#64748b', margin: 0 },
     emailInfo: { marginTop: '10px', color: '#6b7280', fontSize: '14px' },
     form: { display: 'grid', gap: '16px', marginTop: '18px' },
     field: { display: 'grid', gap: '8px' },
-    label: { fontWeight: 700, color: '#2C5530', fontSize: '14px' },
+    label: { fontWeight: 700, color: '#D35400', fontSize: '14px' },
     inputWrapper: { position: 'relative' as const },
     input: {
       width: '100%',
@@ -131,8 +132,8 @@ const FinalizeAccountPage: React.FC = () => {
     },
     inputFocus: {
       background: '#fff',
-      border: '1px solid #2C5530',
-      boxShadow: '0 0 0 3px rgba(44,85,48,0.15)'
+      border: '1px solid #D35400',
+      boxShadow: '0 0 0 3px rgba(211,84,0,0.15)'
     },
     eyeIcon: {
         position: 'absolute' as const,
@@ -146,7 +147,7 @@ const FinalizeAccountPage: React.FC = () => {
     button: {
       marginTop: '8px',
       width: '100%',
-      background: '#2C5530',
+      background: '#D35400',
       color: '#fff',
       padding: '16px 20px',
       borderRadius: '14px',
@@ -176,9 +177,7 @@ const FinalizeAccountPage: React.FC = () => {
     <div style={styles.container}>
       <div style={styles.card}>
         <div style={styles.header}>
-          <div style={styles.logo}>
-            <ChefHat size={34} color="#fff" />
-          </div>
+          <Logo size={80} />
           <h1 style={styles.title}>Quase lá, Chef!</h1>
           <p style={styles.subtitle}>Só mais um passo para começar sua jornada culinária.</p>
           {currentEmail && (

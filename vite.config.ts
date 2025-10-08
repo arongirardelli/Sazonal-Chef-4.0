@@ -19,7 +19,7 @@ export default defineConfig({
     host: true
   },
   build: {
-    // Configurações simplificadas para melhor compatibilidade
+    // Otimizações para PWA
     target: 'es2015',
     minify: 'terser',
     sourcemap: false,

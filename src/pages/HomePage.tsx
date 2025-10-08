@@ -115,7 +115,7 @@ const RecipeSection: React.FC<{
 }
 
 export const HomePage: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const [profile, setProfile] = useState<UserProfileRow | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const [seasonalRecipes, setSeasonalRecipes] = useState<Recipe[]>([])
@@ -480,14 +480,16 @@ export const HomePage: React.FC = () => {
                   alignItems: 'center',
                   padding: '8px 16px',
                   borderRadius: '20px',
-                  background: `${colors.primary}10`,
-                  border: `1px solid ${colors.primary}20`,
+                  background: theme === 'dark' 
+                    ? 'linear-gradient(135deg, rgb(245, 245, 220) 0%, rgb(248, 248, 248) 100%)'
+                    : `#2C553010`,
+                  border: `1px solid #2C553020`,
                   marginBottom: '16px'
                 }}>
                   <span style={{
                     fontSize: fontSizes.sm,
                     fontWeight: 600,
-                    color: colors.primary,
+                    color: '#2C5530',
                     letterSpacing: '0.5px'
                   }}>
                     Bem-vindo de volta
@@ -497,7 +499,7 @@ export const HomePage: React.FC = () => {
                 <h1 style={{
                   fontSize: fontSizes['3xl'],
                   fontWeight: 800,
-                  color: colors.primary,
+                  color: '#CD853F',
                   margin: '0 0 16px 0',
                   letterSpacing: '-0.02em',
                   lineHeight: 1.1

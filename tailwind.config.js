@@ -7,8 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bege': '#F5F0E5',
-        'verde-escuro': '#2C5530',
+        'bone-white': '#F5F5DC',  // Branco Osso/Giz
+        'terracotta': '#CD853F',  // Laranja Terracota
+        'terracotta-dark': '#8B4513',  // Marrom Terracota escuro
+        'dark-gray': '#2F2F2F',  // Cinza Escuro (quase preto)
       }
     },
   },

@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { Eye, EyeOff, ChefHat, CheckCircle } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle } from 'lucide-react'
+import { Logo } from '../components/Logo'
 import { toast } from 'sonner'
 
 export const UpdatePasswordPage: React.FC = () => {
@@ -49,7 +50,7 @@ export const UpdatePasswordPage: React.FC = () => {
       width: '80px',
       height: '80px',
       borderRadius: '50%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #D35400 0%, #B7410E 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -60,7 +61,7 @@ export const UpdatePasswordPage: React.FC = () => {
     title: {
       fontSize: '32px',
       fontWeight: 800,
-      color: '#2C5530',
+      color: '#D35400',
       margin: '0 0 12px 0',
       lineHeight: '1.2'
     },
@@ -81,7 +82,7 @@ export const UpdatePasswordPage: React.FC = () => {
     label: {
       fontSize: '14px',
       fontWeight: 600,
-      color: '#2C5530',
+      color: '#D35400',
       marginBottom: '4px'
     },
     inputContainer: {
@@ -100,9 +101,9 @@ export const UpdatePasswordPage: React.FC = () => {
       boxSizing: 'border-box' as const
     },
     inputFocus: {
-      border: '2px solid #2C5530',
+      border: '2px solid #D35400',
       background: '#ffffff',
-      boxShadow: '0 0 0 4px rgba(44, 85, 48, 0.1)',
+      boxShadow: '0 0 0 4px rgba(211, 84, 0, 0.1)',
       transform: 'translateY(-2px)'
     },
     iconRight: {
@@ -116,13 +117,13 @@ export const UpdatePasswordPage: React.FC = () => {
       padding: '4px'
     },
     iconHover: {
-      color: '#2C5530',
-      backgroundColor: 'rgba(44, 85, 48, 0.1)',
+      color: '#D35400',
+      backgroundColor: 'rgba(211, 84, 0, 0.1)',
       borderRadius: '4px'
     },
     button: {
       width: '100%',
-      background: 'linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)',
+      background: 'linear-gradient(135deg, #D35400 0%, #B7410E 100%)',
       color: 'white',
       padding: '18px 32px',
       fontSize: '18px',
@@ -319,9 +320,7 @@ export const UpdatePasswordPage: React.FC = () => {
       >
         {/* Header */}
         <div style={styles.header}>
-          <div style={styles.logo}>
-            <ChefHat size={40} color="white" />
-          </div>
+          <Logo size={80} />
           <h1 style={styles.title}>Crie sua nova senha</h1>
           <p style={styles.subtitle}>
             Escolha uma senha forte e segura para proteger sua conta.

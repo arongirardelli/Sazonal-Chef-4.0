@@ -134,20 +134,20 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
   // Cores do tema
   const colors = {
     light: {
-      background: '#F5F0E5',
+      background: '#F5F5DC',  // Branco Osso/Giz
       surface: '#ffffff',
-      primary: '#2C5530',
-      secondary: '#D35400',
-      text: '#1f2937',
-      textSecondary: '#64748b',
-      border: '#e5e7eb',
-      accent: '#f3f4f6'
+      primary: '#CD853F',  // Laranja Terracota
+      secondary: '#8B4513',  // Marrom Terracota escuro
+      text: '#2F2F2F',  // Cinza Escuro (quase preto)
+      textSecondary: '#555555',  // Cinza médio
+      border: '#E0E0E0',  // Cinza claro
+      accent: '#F8F8F8'  // Cinza muito claro
     },
     dark: {
       background: '#1a1a1a',
       surface: '#2d2d2d',
-      primary: '#4ade80',
-      secondary: '#fb923c',
+      primary: '#CD853F',  // Laranja Terracota (mantém para modo escuro)
+      secondary: '#8B4513',  // Marrom Terracota escuro
       text: '#f9fafb',
       textSecondary: '#d1d5db',
       border: '#374151',

@@ -44,8 +44,8 @@ export const BottomNav: React.FC = () => {
             >
               <div className="icon-container" style={{
                 background: active ? `${colors.primary}15` : 'transparent',
-                borderRadius: '12px',
-                padding: '8px',
+                borderRadius: '10px',
+                padding: '6px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
               }}>
                 {item.icon}
@@ -68,9 +68,9 @@ export const BottomNav: React.FC = () => {
                     background: colors.primary,
                     borderRadius: '2px',
                     height: '3px',
-                    width: '20px',
+                    width: '18px',
                     position: 'absolute',
-                    bottom: '4px',
+                    bottom: '2px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     animation: 'slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)'

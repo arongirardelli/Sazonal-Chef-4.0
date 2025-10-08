@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppPreferences, type ThemeType, type FontSizeType } from '../contexts/AppPreferencesContext'
+import { useAuth } from '../contexts/AuthContext'
 import { toast } from 'sonner'
 import { BottomNav } from '../components/BottomNav'
-import { supabase } from '@/integrations/supabase'
 import { Eye, EyeOff, ArrowLeft, Settings, Palette, Shield, Trash2, Moon, Sun, Type, Lock, Sparkles } from 'lucide-react'
 
 export default function Preferences() {
   const navigate = useNavigate()
   const { theme, fontSize, setTheme, setFontSize, colors, fontSizes } = useAppPreferences()
+  const { updatePassword } = useAuth()
   const [showClearCacheConfirm, setShowClearCacheConfirm] = useState(false)
   
   // State for password management
@@ -21,54 +22,170 @@ export default function Preferences() {
   const handleThemeToggle = () => {
     const newTheme: ThemeType = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
-    toast.success(`Modo ${newTheme === 'dark' ? 'escuro' : 'claro'} ativado!`)
   }
 
   const handleFontSizeChange = (size: FontSizeType) => {
     setFontSize(size)
-    const sizeLabels = {
-      small: 'Pequeno',
-      medium: 'Médio',
-      large: 'Grande'
-    }
-    toast.success(`Tamanho da fonte alterado para ${sizeLabels[size]}!`)
   }
 
   const handleClearCache = () => {
     setShowClearCacheConfirm(false)
     // Simula limpeza de cache (apenas visual)
-    toast.success('Cache limpo com sucesso!')
+    toast.success('Cache limpo com sucesso!', {
+      className: 'toast-cache-success',
+      style: {
+        background: 'white',
+        color: '#2F2F2F',
+        border: '1px solid #E0E0E0',
+        borderRadius: '12px',
+        padding: '16px 24px',
+        fontSize: '15px',
+        fontWeight: '500',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        maxWidth: '380px',
+        minWidth: '300px',
+        margin: '0 auto',
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
+        lineHeight: '1.4',
+        letterSpacing: '0.01em'
+      }
+    })
   }
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword.length < 8) {
-      toast.error('A senha deve ter no mínimo 8 caracteres.');
+      toast.error('A senha deve ter no mínimo 8 caracteres', {
+        className: 'toast-password-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      });
       return;
     }
     if (newPassword !== confirmNewPassword) {
-      toast.error('As senhas não coincidem.');
+      toast.error('As senhas não coincidem', {
+        className: 'toast-password-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      });
       return;
     }
 
     setIsUpdatingPassword(true);
     try {
-      const { error } = await supabase.functions.invoke('set-password', {
-        body: { newPassword },
-      });
+      const result = await updatePassword(newPassword);
 
-      if (error) {
-        throw new Error(error.message);
+      if (result.success) {
+        toast.success('Senha atualizada com sucesso!', {
+          className: 'toast-password-success',
+          style: {
+            background: 'white',
+            color: '#2F2F2F',
+            border: '1px solid #E0E0E0',
+            borderRadius: '12px',
+            padding: '16px 24px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            maxWidth: '380px',
+            minWidth: '300px',
+            margin: '0 auto',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            lineHeight: '1.4',
+            letterSpacing: '0.01em',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            width: '100%'
+          }
+        });
+        setPasswordDialogOpen(false);
+        setNewPassword('');
+        setConfirmNewPassword('');
+      } else {
+        throw new Error(result.message || 'Erro ao atualizar senha');
       }
-      
-      toast.success('Senha atualizada com sucesso!');
-      setPasswordDialogOpen(false);
-      setNewPassword('');
-      setConfirmNewPassword('');
 
     } catch (error: any) {
-      console.error('Erro ao invocar a função set-password:', error);
-      toast.error(`Falha ao atualizar a senha: ${error.message}`);
+      console.error('Erro ao atualizar senha:', error);
+      
+      // Verifica se o erro é relacionado à senha ser igual à anterior
+      const errorMessage = error.message || error.toString();
+      const isSamePassword = errorMessage.includes('same') || 
+                           errorMessage.includes('igual') || 
+                           errorMessage.includes('anterior') ||
+                           errorMessage.includes('New password should be different');
+      
+      const message = isSamePassword 
+        ? 'A nova senha deve ser diferente da senha antiga'
+        : 'Falha ao atualizar a senha';
+      
+      toast.error(message, {
+        className: 'toast-password-error',
+        style: {
+          background: 'white',
+          color: '#2F2F2F',
+          border: '1px solid #E0E0E0',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          fontSize: '15px',
+          fontWeight: '500',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          maxWidth: '380px',
+          minWidth: '300px',
+          margin: '0 auto',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          lineHeight: '1.4',
+          letterSpacing: '0.01em',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      });
     } finally {
       setIsUpdatingPassword(false);
     }
@@ -209,11 +326,11 @@ export default function Preferences() {
             
             {/* Seção Aparência */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -241,7 +358,7 @@ export default function Preferences() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -253,7 +370,7 @@ export default function Preferences() {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -275,6 +392,8 @@ export default function Preferences() {
                   icon={theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
                   title="Modo Escuro"
                   description="Alternar entre tema claro e escuro"
+                  theme={theme}
+                  colors={colors}
                   action={
                     <button
                       onClick={handleThemeToggle}
@@ -316,7 +435,6 @@ export default function Preferences() {
                       }} />
                     </button>
                   }
-                  colors={colors}
                 />
 
                 {/* Tamanho da Fonte */}
@@ -368,7 +486,7 @@ export default function Preferences() {
                             padding: '12px 20px',
                             borderRadius: 16,
                             border: `2px solid ${isSelected ? colors.primary : 'rgba(44,85,48,0.1)'}`,
-                            background: isSelected ? colors.primary : 'white',
+                            background: isSelected ? colors.primary : (theme === 'dark' ? '#1a1a1a' : 'white'),
                             color: isSelected ? 'white' : colors.text,
                             fontSize: '14px',
                             fontWeight: isSelected ? 700 : 600,
@@ -403,11 +521,11 @@ export default function Preferences() {
 
             {/* Seção Segurança */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -435,7 +553,7 @@ export default function Preferences() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -447,7 +565,7 @@ export default function Preferences() {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -467,6 +585,8 @@ export default function Preferences() {
                 icon={<Lock size={20} />}
                 title="Alterar Senha"
                 description="Defina uma nova senha para sua conta"
+                theme={theme}
+                colors={colors}
                 action={
                   <button
                     onClick={() => setPasswordDialogOpen(true)}
@@ -494,17 +614,16 @@ export default function Preferences() {
                     Alterar
                   </button>
                 }
-                colors={colors}
               />
             </div>
 
             {/* Seção Sistema */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 24, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -532,7 +651,7 @@ export default function Preferences() {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -544,7 +663,7 @@ export default function Preferences() {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -564,6 +683,8 @@ export default function Preferences() {
                 icon={<Trash2 size={20} />}
                 title="Limpar Cache"
                 description="Remove dados temporários do aplicativo"
+                theme={theme}
+                colors={colors}
                 action={
                   <button
                     onClick={() => setShowClearCacheConfirm(true)}
@@ -571,7 +692,7 @@ export default function Preferences() {
                       padding: '12px 20px',
                       borderRadius: 16,
                       border: `2px solid #dc2626`,
-                      background: 'white',
+                      background: theme === 'dark' ? '#2d2d2d' : 'white',
                       color: '#dc2626',
                       fontSize: '14px',
                       fontWeight: 700,
@@ -586,7 +707,7 @@ export default function Preferences() {
                       e.currentTarget.style.boxShadow = '0 8px 24px rgba(220,38,38,0.2)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'white';
+                      e.currentTarget.style.background = theme === 'dark' ? '#1a1a1a' : 'white';
                       e.currentTarget.style.color = '#dc2626';
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = '0 4px 16px rgba(220,38,38,0.1)';
@@ -595,7 +716,6 @@ export default function Preferences() {
                     Limpar
                   </button>
                 }
-                colors={colors}
               />
             </div>
           </div>
@@ -728,6 +848,7 @@ interface PreferenceItemProps {
   description: string;
   action: React.ReactNode;
   colors: any;
+  theme: 'light' | 'dark';
 }
 
 const PreferenceItem: React.FC<PreferenceItemProps> = ({ 
@@ -735,7 +856,8 @@ const PreferenceItem: React.FC<PreferenceItemProps> = ({
   title, 
   description, 
   action, 
-  colors 
+  colors,
+  theme
 }) => {
   return (
     <div style={{ 
@@ -744,11 +866,18 @@ const PreferenceItem: React.FC<PreferenceItemProps> = ({
       alignItems: 'center',
       padding: '16px',
       borderRadius: 16,
-      background: 'transparent',
-      border: '1px solid rgba(44,85,48,0.1)',
-      transition: 'all 0.3s ease'
+      background: theme === 'dark' ? 'rgb(55, 65, 81)' : 'transparent',
+      border: theme === 'dark' ? '1px solid rgb(55, 65, 81)' : '1px solid rgba(44,85,48,0.1)',
+      transition: 'all 0.3s ease',
+      gap: '20px' // Espaçamento entre conteúdo e ação
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 16,
+        flex: 1, // Permite que o conteúdo ocupe o espaço disponível
+        minWidth: 0 // Permite que o texto seja truncado se necessário
+      }}>
         <div style={{
           width: 44,
           height: 44,
@@ -759,28 +888,41 @@ const PreferenceItem: React.FC<PreferenceItemProps> = ({
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'all 0.3s ease',
-          border: `2px solid ${colors.primary}20`
+          border: `2px solid ${colors.primary}20`,
+          flexShrink: 0 // Evita que o ícone seja comprimido
         }}>
           {icon}
         </div>
-        <div>
+        <div style={{ 
+          minWidth: 0, // Permite truncamento do texto
+          flex: 1, // Ocupa o espaço restante
+          maxWidth: 'calc(100% - 80px)' // Garante espaço para o botão
+        }}>
           <div style={{ 
             fontWeight: 700, 
-            color: colors.text, 
+            color: theme === 'dark' ? '#F9FAFB' : colors.text, 
             fontSize: '16px',
-            marginBottom: 4
+            marginBottom: 4,
+            whiteSpace: 'nowrap'
+            // Removido overflow e textOverflow para evitar abreviação
           }}>
             {title}
           </div>
           <div style={{ 
             fontSize: '14px', 
-            color: colors.textSecondary 
+            color: theme === 'dark' ? '#D1D5DB' : colors.textSecondary,
+            lineHeight: '1.4'
           }}>
             {description}
           </div>
         </div>
       </div>
-      {action}
+      <div style={{ 
+        flexShrink: 0, // Evita que o botão seja comprimido
+        marginLeft: '12px' // Espaçamento adicional do botão
+      }}>
+        {action}
+      </div>
     </div>
   )
 }

@@ -11,14 +11,23 @@ import type { StructuredIngredient } from '@/types/supabase';
 export function formatIngredientForRecipe(ing: StructuredIngredient): string {
   // Se ambos display e household_display existem, combinar adequadamente
   if (ing.display && ing.household_display) {
-    // Verificar se o display já contém o household_display
+    // Normalização simples para comparação
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').trim();
+    const displayNorm = norm(ing.display);
+    const householdNorm = norm(ing.household_display);
+
+    // 1) Se o display já contém o household_display → usar display
     if (ing.display.includes(ing.household_display)) {
-      // Se já contém, usar o display como está
       return ing.display;
-    } else {
-      // Se não contém, adicionar o household_display ao display
-      return `${ing.display} (${ing.household_display})`;
     }
+
+    // 2) Se o household_display já contém o display (caso de "20 Tomates cereja (aprox 20g)") → usar household_display
+    if (householdNorm.includes(displayNorm)) {
+      return ing.household_display;
+    }
+
+    // 3) Caso comum: anexar household_display ao display
+    return `${ing.display} (${ing.household_display})`;
   }
   
   // Se apenas display existe, usar ele

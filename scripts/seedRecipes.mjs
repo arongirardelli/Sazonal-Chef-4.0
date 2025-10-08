@@ -503,11 +503,11 @@ const jantar = [
     instructions: ['Tempere o frango com limão e grelhe.', 'Cozinhe o arroz.'],
     tips: [],
     structured_ingredients: [
-      { name: 'Peito de frango', quantity: 400, unit: 'g' },
-      { name: 'Arroz branco', quantity: 200, unit: 'g' },
-      { name: 'Suco de limão', quantity: 30, unit: 'ml' },
-      { name: 'Azeite de oliva', quantity: 15, unit: 'ml' },
-      { name: 'Sal', quantity: 1, unit: 'colher de chá' },
+      { name: 'Peito de frango', quantity: 200, unit: 'g', household_display: '200g de peito de frango' },
+      { name: 'Arroz branco', quantity: 200, unit: 'g', household_display: '200g de arroz branco' },
+      { name: 'Suco de limão', quantity: 30, unit: 'ml', household_display: '30ml de suco de limão' },
+      { name: 'Azeite de oliva', quantity: 15, unit: 'ml', household_display: '15ml de azeite de oliva' },
+      { name: 'Sal', quantity: 1, unit: 'colher de chá', household_display: '1 colher de chá de sal' },
     ]
   }),
   r({

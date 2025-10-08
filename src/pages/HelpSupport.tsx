@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppPreferences } from '../contexts/AppPreferencesContext'
 import { BottomNav } from '../components/BottomNav'
-import { ArrowLeft, HelpCircle, MessageCircle, Mail, Phone, Clock, CheckCircle, AlertCircle, Sparkles, ExternalLink } from 'lucide-react'
+import { ArrowLeft, HelpCircle, MessageCircle } from 'lucide-react'
 
 // Componente do ícone de envelope personalizado
 const EnvelopeIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = 'currentColor' }) => (
@@ -73,7 +73,7 @@ const HeartIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, col
 )
 
 export const HelpSupport: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
 
@@ -243,11 +243,11 @@ export const HelpSupport: React.FC = () => {
             
             {/* Card Principal */}
             <div style={{ 
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20, 
               padding: 32, 
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -275,19 +275,19 @@ export const HelpSupport: React.FC = () => {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
                   boxShadow: '0 4px 16px rgba(44,85,48,0.3)'
                 }}>
-                  <MessageCircle size={24} />
+                  <MessageCircle size={24} color="white" />
                 </div>
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -329,7 +329,7 @@ export const HelpSupport: React.FC = () => {
                     borderRadius: 16,
                     overflow: 'hidden',
                     border: `1px solid ${openFAQ === index ? colors.primary : 'rgba(44,85,48,0.1)'}`,
-                    background: openFAQ === index ? `${colors.primary}05` : 'white',
+                    background: openFAQ === index ? `${colors.primary}05` : (theme === 'dark' ? '#1a1a1a' : 'white'),
                     transition: 'all 0.3s ease',
                     boxShadow: openFAQ === index ? '0 8px 24px rgba(44,85,48,0.1)' : '0 2px 8px rgba(0,0,0,0.04)'
                   }}>
@@ -404,11 +404,11 @@ export const HelpSupport: React.FC = () => {
 
             {/* Seção Sobre o Sazonal Chef */}
             <div style={{
-              background: 'white',
+              background: theme === 'dark' ? '#2d2d2d' : 'white',
               borderRadius: 20,
               padding: 32,
-              border: '1px solid rgba(44,85,48,0.1)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+              border: theme === 'dark' ? '1px solid #374151' : '1px solid rgba(44,85,48,0.1)',
+              boxShadow: theme === 'dark' ? '0 2px 8px rgba(55, 65, 81, 0.125)' : '0 8px 32px rgba(0,0,0,0.08)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -437,7 +437,7 @@ export const HelpSupport: React.FC = () => {
                   width: 48,
                   height: 48,
                   borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${colors.primary}, #1a4d1f)`,
+                  background: '#2C5530',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -449,7 +449,7 @@ export const HelpSupport: React.FC = () => {
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: colors.primary, 
+                    color: theme === 'dark' ? '#CD853F' : '#000000', 
                     fontSize: '20px',
                     fontWeight: 700
                   }}>
@@ -482,16 +482,16 @@ export const HelpSupport: React.FC = () => {
                     width: 44,
                     height: 44,
                     borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
-                    color: colors.primary,
+                    background: '#CD853F',
+                    color: 'white',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    border: `2px solid ${colors.primary}20`,
+                    border: 'none',
                     flexShrink: 0
                   }}>
-                    <HeartIcon size={20} color={colors.primary} />
+                    <HeartIcon size={20} color="white" />
                   </div>
                   <div style={{ flex: 1 }}>
                     <h4 style={{ 
@@ -541,21 +541,21 @@ Afinal, comida de verdade nutre o corpo e alimenta a alma. Espero que o Sazonal 
                     width: 44,
                     height: 44,
                     borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${colors.primary}20, ${colors.accent}20)`,
-                    color: colors.primary,
+                    background: '#2C5530',
+                    color: 'white',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     transition: 'all 0.3s ease',
-                    border: `2px solid ${colors.primary}20`,
+                    border: 'none',
                     flexShrink: 0
                   }}>
-                    <EnvelopeIcon size={20} color={colors.primary} />
+                    <EnvelopeIcon size={20} color="white" />
                   </div>
                   <div style={{ flex: 1 }}>
                     <h4 style={{ 
                       fontWeight: 700, 
-                      color: colors.text, 
+                      color: theme === 'dark' ? '#CD853F' : colors.text, 
                       fontSize: '18px',
                       marginBottom: 12,
                       margin: 0

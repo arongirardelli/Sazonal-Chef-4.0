@@ -137,7 +137,7 @@ export const GamificationCard: React.FC<Props> = ({ totalPoints = 0, recipesView
             <div style={{
               width: `${progressPercentage}%`,
               height: '100%',
-              background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
+              background: `linear-gradient(90deg, #2C5530, #D35400)`,
               borderRadius: 4,
               transition: 'width 0.3s ease'
             }} />

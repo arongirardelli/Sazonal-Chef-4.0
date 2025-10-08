@@ -30,6 +30,11 @@ export interface ShoppingList {
 const normalizeName = (name: string): string => {
   const lower = name.toLowerCase().trim();
 
+  // CRÍTICO: Manter avocado separado de abacate (verificar ANTES de outras normalizações)
+  if (lower.includes('avocado')) {
+    return 'avocado';
+  }
+
   // Unificar todas as variações de contra-filé
   if (lower.includes('contra-filé') || lower.includes('contrafilé') || lower.includes('contra filé')) {
     return 'bife de contra-filé';
@@ -72,18 +77,31 @@ const normalizeName = (name: string): string => {
     return 'cebolinha';
   }
   
+  // CORREÇÃO: Normalizar aspargo/aspargos para "aspargo" (singular)
+  if (lower.includes('aspargo')) {
+    return 'aspargo';
+  }
+  
+  // CORREÇÃO: Normalizar repolho para key única
+  if (lower.includes('repolho')) {
+    return 'repolho';
+  }
+  
   // CORREÇÃO: Normalizar ervas frescas removendo "picadas"
   if (lower.includes('ervas frescas')) {
     return 'ervas frescas';
   }
   
   // CORREÇÃO CRÍTICA: Normalizar frango desfiado para manter separado do peito de frango
-  if (lower.includes('frango desfiado') || lower.includes('peito de frango desfiado')) {
+  // IMPORTANTE: Verificar "peito de frango cozido desfiado" ANTES de "peito de frango" para evitar normalização incorreta
+  if (lower.includes('frango desfiado') || lower.includes('peito de frango desfiado') || 
+      lower.includes('peito de frango cozido desfiado') || lower.includes('frango cozido desfiado')) {
     return 'frango desfiado';
   }
   
   // NOVO: Normalizar todas as variações de peito de frango para "peito de frango"
-  if (lower.includes('peito de frango') || lower.includes('frango cozido')) {
+  // Mas não incluir "frango cozido" para evitar conflito com "frango desfiado"
+  if (lower.includes('peito de frango')) {
     return 'peito de frango';
   }
   
@@ -187,7 +205,8 @@ const cookedToRawFactors: Record<string, number> = {
     'cevada': 0.33,
     'aveia': 0.33,
     'frango': 0.75,      // 60g cozido * 0.75 = 80g cru (perda de 25% no cozimento)
-    'peito de frango': 0.75, // 60g cozido * 0.75 = 80g cru
+    // CORREÇÃO CRÍTICA: Remover "peito de frango" genérico para evitar conversão incorreta
+    // Apenas aplicar conversão quando explicitamente cozido
     'peito de frango cozido': 0.75, // 60g cozido * 0.75 = 80g cru
     'peito de frango cozido desfiado': 0.75 // 60g cozido * 0.75 = 80g cru
 };
@@ -242,7 +261,7 @@ function shouldShowUnitReference(ingredientName: string, category: string): bool
   
   // Ingredientes que são vendidos em unidades e devem ter referência visual
   const unitSoldIngredients = [
-    'abacate', 'abóbora', 'abobora', 'abobrinha', 'banana', 'batata', 'batata doce',
+    'abacate', 'avocado', 'abóbora', 'abobora', 'abobrinha', 'banana', 'batata', 'batata doce',
     'berinjela', 'cebola', 'cebola roxa', 'cenoura', 'gengibre', 'limão', 'limao',
     'maçã', 'maca', 'manga', 'pepino', 'pimentão', 'pimentao', 'tomate'
   ];
@@ -361,6 +380,7 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
     brocolis_total_grams?: number; // Para brócolis: total em gramas
     milho_verde_total_latas?: number; // Para milho verde: total em latas
     aspargo_total_macos?: number; // Para aspargo: total em maços
+    repolho_total_grams?: number; // Para repolho: total em gramas
     leite_total_ml?: number; // Para leite: total em ml
     ovos_inteiros?: number; // Para consolidação de ovos
     claras_ovo?: number; // Para consolidação de claras
@@ -495,6 +515,47 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
         };
       }
       return; // CRITICAL: Skip all other processing for this ingredient.
+    }
+
+    // LÓGICA ESPECÍFICA: Bife de contra-filé - converter para gramas
+    if (key === 'bife de contra-filé') {
+      let contraFileGrams = 0;
+      
+      // Calcular gramas baseado na unidade e household_display
+      if (ing.unit === 'g') {
+        contraFileGrams = ing.quantity;
+      } else if (ing.unit === 'unidade' || ing.unit === 'unidades' || ing.unit === 'filé' || ing.unit === 'filés' || ing.unit === 'file' || ing.unit === 'files') {
+        // Se tem household_display com peso, usar esse valor
+        if (ing.household_display) {
+          const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+          if (weightMatch) {
+            contraFileGrams = parseFloat(weightMatch[1]);
+          } else {
+            // Fallback: assumir 150g por bife (valor padrão do ingredientData.ts)
+            contraFileGrams = ing.quantity * 150;
+          }
+        } else {
+          // Fallback: assumir 150g por bife (valor padrão do ingredientData.ts)
+          contraFileGrams = ing.quantity * 150;
+        }
+      } else {
+        // Fallback: assumir que é em gramas
+        contraFileGrams = ing.quantity;
+      }
+      
+      if (consolidatedIngredients[key]) {
+        consolidatedIngredients[key].quantity += contraFileGrams;
+      } else {
+        consolidatedIngredients[key] = {
+          name: 'Bife de contra-filé',
+          quantity: contraFileGrams,
+          unit: 'g',
+          originalUnit: ing.unit,
+          category: 'Carnes e Peixes',
+          household_display: ing.household_display,
+        };
+      }
+      return; // Pular processamento geral
     }
 
     // LÓGICA ESPECÍFICA: Raspas de laranja - converter para gramas
@@ -772,21 +833,50 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       return; // Pular todo o resto do processamento
     }
 
-    // CORREÇÃO PARA ABACATE: Consolidar todas as entradas de abacate como 'unidades'
-    if (key.includes('abacate')) {
-      if (consolidatedIngredients['abacate']) {
-        // Se já existe, apenas soma a quantidade (assumindo que todas são unidades)
-        consolidatedIngredients['abacate'].quantity += ing.quantity;
-      } else {
-        // Se for a primeira entrada, cria o item consolidado
-        consolidatedIngredients['abacate'] = {
-          name: 'Abacate',
-          quantity: ing.quantity,
-          unit: 'unidades', // Força a unidade a ser 'unidades' para a lógica de formatação
-          originalUnit: ing.unit,
-          category: 'Hortifruti',
-        };
+    // CORREÇÃO PARA ABACATE/AVOCADO: consolidar SOMENTE quando o ingrediente é exatamente "abacate" OU "avocado"
+    // Evita capturar preparos como "creme de abacate", "maionese de abacate", etc.
+    if (key === 'abacate' || key === 'abacate maduro' || key === 'avocado' || key === 'avocado maduro') {
+      const isUnits = ing.unit === 'unidade' || ing.unit === 'unidades' || ing.unit === 'maduro' || ing.unit === 'maduros' || ing.unit === 'pequeno' || ing.unit === 'médio' || ing.unit === 'grande' || ing.unit === '';
+      const isGrams = ing.unit === 'g' || ing.unit === 'gramas';
+
+      // Se for avocado, manter nome e chave separados
+      const keyName = (key.includes('avocado') ? 'avocado' : 'abacate');
+      const displayName = keyName === 'avocado' ? 'Avocado' : 'Abacate';
+
+      const existing = consolidatedIngredients[keyName] || {
+        name: displayName,
+        category: 'Hortifruti',
+        originalUnit: ing.unit,
+        abacate_units_total: 0,
+        abacate_grams_total: 0
+      };
+
+      if (isUnits) {
+        // Converter para gramas usando household_display se disponível
+        let gramsToAdd = 0;
+        if (ing.household_display) {
+          const weightMatch = ing.household_display.match(/(\d+)g/);
+          if (weightMatch) {
+            gramsToAdd = parseFloat(weightMatch[1]);
+          }
+        }
+        // Se não conseguiu extrair do household_display, usar peso padrão
+        if (gramsToAdd === 0) {
+          const unitWeight = keyName === 'avocado' ? 200 : 350;
+          gramsToAdd = ing.quantity * unitWeight;
+        }
+        existing.abacate_grams_total = (existing.abacate_grams_total || 0) + gramsToAdd;
+      } else if (isGrams) {
+        existing.abacate_grams_total = (existing.abacate_grams_total || 0) + ing.quantity;
       }
+
+      // Sempre consolidar em gramas para facilitar o cálculo
+      consolidatedIngredients[keyName] = {
+        ...existing,
+        quantity: Math.round(existing.abacate_grams_total || 0),
+        unit: 'g',
+        household_display: ing.household_display
+      };
       return; // Pula o resto do processamento para este ingrediente
     }
 
@@ -1208,6 +1298,42 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       return; // Pular processamento normal
     }
 
+    // CORREÇÃO CRÍTICA: Tratamento especial para gelatina incolor - consolidar em gramas
+    if (key === 'gelatina incolor' || key === 'gelatina incolor sem sabor') {
+      let totalGrams = 0;
+      
+      // Calcular gramas baseado na unidade
+      if (ing.unit === 'pacote' || ing.unit === 'pacotes' || ing.unit === 'sachê' || ing.unit === 'sachês') {
+        totalGrams = ing.quantity * 12; // 12g por pacote
+      } else if (ing.unit === 'g') {
+        totalGrams = ing.quantity;
+      } else if (ing.household_display) {
+        // Usar household_display se disponível
+        const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+        if (weightMatch) {
+          totalGrams = parseFloat(weightMatch[1]);
+        } else {
+          totalGrams = ing.quantity * 12; // Fallback: assumir pacotes
+        }
+      } else {
+        totalGrams = ing.quantity * 12; // Fallback: assumir pacotes
+      }
+
+      if (consolidatedIngredients[key]) {
+        consolidatedIngredients[key].quantity += totalGrams;
+      } else {
+        consolidatedIngredients[key] = {
+          name: 'Gelatina incolor',
+          quantity: totalGrams,
+          unit: 'g',
+          originalUnit: ing.unit,
+          category: 'Mercearia',
+          household_display: ing.household_display
+        };
+      }
+      return; // Pular processamento normal
+    }
+
     // CORREÇÃO CRÍTICA: Tratamento especial para leite - consolidar corretamente em ml
     if (key === 'leite') {
       let leiteMl = 0;
@@ -1585,77 +1711,76 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
     }
     
     // CORREÇÃO CRÍTICA: Tratamento especial para peito de frango - consolidar corretamente em gramas
-    if (key === 'peito de frango') {
-      let peitoFrangoGrams = 0;
-      
-      // Calcular gramas baseado na unidade e household_display
-      if (ing.unit === 'g') {
-        peitoFrangoGrams = ing.quantity;
-      } else if (ing.unit === 'filés' || ing.unit === 'filé' || ing.unit === 'file' || ing.unit === 'files') {
-        // Tentar extrair peso do household_display se disponível
-        if (ing.household_display) {
-          const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
-          if (weightMatch) {
-            peitoFrangoGrams = parseFloat(weightMatch[1]);
-          } else {
-            // Fallback: assumir 200g por filé de peito de frango
-            peitoFrangoGrams = ing.quantity * 200;
-          }
-        } else {
-          // Fallback: assumir 200g por filé de peito de frango
-          peitoFrangoGrams = ing.quantity * 200;
-        }
-      } else if (ing.unit === 'xícara' || ing.unit === 'xícaras') {
-        // Tentar extrair peso do household_display se disponível
-        if (ing.household_display) {
-          const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
-          if (weightMatch) {
-            peitoFrangoGrams = parseFloat(weightMatch[1]);
-          } else {
-            // Fallback: assumir 150g por xícara de peito de frango desfiado
-            peitoFrangoGrams = ing.quantity * 150;
-          }
-        } else {
-          // Fallback: assumir 150g por xícara de peito de frango desfiado
-          peitoFrangoGrams = ing.quantity * 150;
-        }
-      } else if (ing.unit === 'colher de sopa' || ing.unit === 'colheres de sopa') {
-        // Tentar extrair peso do household_display se disponível
-        if (ing.household_display) {
-          const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
-          if (weightMatch) {
-            peitoFrangoGrams = parseFloat(weightMatch[1]);
-          } else {
-            // Fallback: assumir 20g por colher de sopa de peito de frango desfiado
-            peitoFrangoGrams = ing.quantity * 20;
-          }
-        } else {
-          // Fallback: assumir 20g por colher de sopa de peito de frango desfiado
-          peitoFrangoGrams = ing.quantity * 20;
-        }
-      } else {
-        // Fallback: assumir que é em gramas
-        peitoFrangoGrams = ing.quantity;
-      }
-      
-      if (consolidatedIngredients[key]) {
-        // Somar gramas de peito de frango
-        consolidatedIngredients[key].quantity += peitoFrangoGrams;
-      } else {
-        // Criar novo ingrediente consolidado
-        consolidatedIngredients[key] = {
-          name: 'Peito de frango',
-          quantity: peitoFrangoGrams,
-          unit: 'g',
-          originalUnit: ing.unit,
-          category: 'Carnes e Peixes',
-          household_display: ing.household_display
-        };
-      }
-      return; // Pular processamento normal
-    }
-    
-    
+            // CORREÇÃO CRÍTICA: Tratamento especial para peito de frango - consolidar corretamente em gramas
+            if (key === 'peito de frango') {
+              let peitoFrangoGrams = 0;
+        
+              // Calcular gramas baseado na unidade e household_display
+              if (ing.unit === 'g') {
+                peitoFrangoGrams = ing.quantity;
+              } else if (ing.unit === 'filés' || ing.unit === 'filé' || ing.unit === 'file' || ing.unit === 'files') {
+                // Tentar extrair peso do household_display se disponível
+                if (ing.household_display) {
+                  const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+                  if (weightMatch) {
+                    peitoFrangoGrams = parseFloat(weightMatch[1]);
+                  } else {
+                    // Fallback: assumir 200g por filé de peito de frango
+                    peitoFrangoGrams = ing.quantity * 200;
+                  }
+                } else {
+                  // Fallback: assumir 200g por filé de peito de frango
+                  peitoFrangoGrams = ing.quantity * 200;
+                }
+              } else if (ing.unit === 'xícara' || ing.unit === 'xícaras') {
+                // Tentar extrair peso do household_display se disponível
+                if (ing.household_display) {
+                  const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+                  if (weightMatch) {
+                    peitoFrangoGrams = parseFloat(weightMatch[1]);
+                  } else {
+                    // Fallback: assumir 150g por xícara de peito de frango desfiado
+                    peitoFrangoGrams = ing.quantity * 150;
+                  }
+                } else {
+                  // Fallback: assumir 150g por xícara de peito de frango desfiado
+                  peitoFrangoGrams = ing.quantity * 150;
+                }
+              } else if (ing.unit === 'colher de sopa' || ing.unit === 'colheres de sopa') {
+                // Tentar extrair peso do household_display se disponível
+                if (ing.household_display) {
+                  const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+                  if (weightMatch) {
+                    peitoFrangoGrams = parseFloat(weightMatch[1]);
+                  } else {
+                    // Fallback: assumir 20g por colher de sopa de peito de frango desfiado
+                    peitoFrangoGrams = ing.quantity * 20;
+                  }
+                } else {
+                  // Fallback: assumir 20g por colher de sopa de peito de frango desfiado
+                  peitoFrangoGrams = ing.quantity * 20;
+                }
+              } else {
+                // Fallback: assumir que é em gramas
+                peitoFrangoGrams = ing.quantity;
+              }
+        
+              if (consolidatedIngredients[key]) {
+                // Somar gramas de peito de frango
+                consolidatedIngredients[key].quantity += peitoFrangoGrams;
+              } else {
+                // Criar novo ingrediente consolidado
+                consolidatedIngredients[key] = {
+                  name: 'Peito de frango',
+                  quantity: peitoFrangoGrams,
+                  unit: 'g',
+                  originalUnit: ing.unit,
+                  category: 'Carnes e Peixes',
+                  household_display: ing.household_display
+                };
+              }
+              return; // Pular processamento normal
+            }    
     // CORREÇÃO CRÍTICA: Tratamento especial para salmão - consolidar corretamente em gramas
     if (key === 'salmão' || key === 'salmao') {
       let salmaoGrams = 0;
@@ -2475,6 +2600,41 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       return; // Pular processamento normal
     }
     
+    // CORREÇÃO CRÍTICA: Tratamento especial para tomate cereja (antes de tomate comum)
+    if (key === 'tomate cereja') {
+      // Regra específica: 20 unidades ≈ 200g (20g cada)
+      let cherryTomatoGrams = 0;
+      if (ing.unit === 'g') {
+        cherryTomatoGrams = ing.quantity;
+      } else if (ing.unit === 'unidade' || ing.unit === 'unidades') {
+        // Preferir peso do household_display se existir
+        if (ing.household_display) {
+          const weightMatch = ing.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
+          if (weightMatch) {
+            cherryTomatoGrams = parseFloat(weightMatch[1]);
+          } else {
+            cherryTomatoGrams = ing.quantity * 20; // 20g por unidade
+          }
+        } else {
+          cherryTomatoGrams = ing.quantity * 20; // 20g por unidade
+        }
+      }
+
+      if (consolidatedIngredients[key]) {
+        consolidatedIngredients[key].quantity = (consolidatedIngredients[key].quantity || 0) + cherryTomatoGrams;
+      } else {
+        consolidatedIngredients[key] = {
+          name: 'Tomate cereja',
+          quantity: cherryTomatoGrams,
+          unit: 'g',
+          originalUnit: ing.unit,
+          category: 'Hortifruti',
+          household_display: ing.household_display
+        };
+      }
+      return; // Pular processamento normal
+    }
+
     // CORREÇÃO CRÍTICA: Tratamento especial para tomate - consolidar corretamente em gramas
     if (key === 'tomate') {
       let tomateGrams = 0;
@@ -2770,7 +2930,7 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
     }
     
     // CORREÇÃO CRÍTICA: Tratamento especial para aspargo - consolidar corretamente em maços
-    if (key === 'aspargo' || key === 'aspargos') {
+    if (key === 'aspargo') {
       let aspargoMacos = 0;
       
       // Calcular maços baseado na unidade e household_display
@@ -2813,6 +2973,45 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
           originalUnit: ing.unit,
           category: 'Hortifruti',
           aspargo_total_macos: aspargoMacos,
+          household_display: ing.household_display
+        };
+      }
+      return; // Pular processamento normal
+    }
+    
+    // CORREÇÃO CRÍTICA: Tratamento especial para repolho - consolidar corretamente em gramas
+    // 1 unidade = 1000g
+    if (key === 'repolho') {
+      let repolhoGrams = 0;
+      
+      // Calcular gramas baseado na unidade e household_display
+      if (ing.unit === 'unidade' || ing.unit === 'unidades') {
+        // Se tem household_display com gramas, usar esse valor
+        if (ing.household_display) {
+          const weightMatch = ing.household_display.match(/(\d+)g/);
+          if (weightMatch) {
+            repolhoGrams = parseFloat(weightMatch[1]);
+          } else {
+            repolhoGrams = ing.quantity * 1000; // 1 unidade = 1000g
+          }
+        } else {
+          repolhoGrams = ing.quantity * 1000; // 1 unidade = 1000g
+        }
+      } else if (ing.unit === 'g' || ing.unit === 'gramas') {
+        repolhoGrams = ing.quantity;
+      }
+      
+      if (consolidatedIngredients[key]) {
+        consolidatedIngredients[key].repolho_total_grams = (consolidatedIngredients[key].repolho_total_grams || 0) + repolhoGrams;
+        consolidatedIngredients[key].quantity = consolidatedIngredients[key].repolho_total_grams;
+      } else {
+        consolidatedIngredients[key] = {
+          name: 'Repolho',
+          quantity: repolhoGrams,
+          unit: 'g',
+          originalUnit: ing.unit,
+          category: 'Hortifruti',
+          repolho_total_grams: repolhoGrams,
           household_display: ing.household_display
         };
       }
@@ -2912,13 +3111,13 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
     }
 
     // CORREÇÃO CRÍTICA: Evitar processamento duplo de ingredientes com lógica específica
-    if (key === 'azeite de oliva' || key === 'azeite' || key === 'azeite de dendê' || key === 'azeite de dende' || key === 'espinafre' || key === 'manga' || key === 'cebola' || key === 'cominho em pó' || key === 'cominho em po' || key === 'frutas frescas' || key === 'leite' || key === 'batata doce' || key === 'banana' || key === 'banana-da-terra' || key === 'banana da terra' || key === 'batata' || key === 'tomate' || key === 'cenoura' || key === 'pimentão vermelho' || key === 'pimentão amarelo' || key === 'pimentão verde' || key === 'brócolis' || key === 'brocolis' || key === 'milho verde' || key === 'aspargo' || key === 'aspargos' || key === 'tâmara' || key === 'tamara' || key === 'pão de forma sem casca' || key === 'pao de forma sem casca' || key === 'melado de cana' || key === 'salsinha' || key === 'limão siciliano' || key === 'limao siciliano' || key === 'frango desfiado' || key === 'peito de frango' || key === 'salmão' || key === 'salmao' || key === 'açúcar' || key === 'acucar' || key === 'açúcar mascavo' || key === 'acucar mascavo' || key === 'sal' || key === 'sal negro' || key === 'páprica' || key === 'paprica' || key === 'páprica doce' || key === 'paprica doce' || key === 'suco de laranja' || key === 'alho' || key === 'couve' || key === 'biscoito maizena' || key === 'biscoito maisena' || key === 'raspas de laranja' || key === 'raspas de limão' || key === 'raspas de limao') {
+    if (key === 'azeite de oliva' || key === 'azeite' || key === 'azeite de dendê' || key === 'azeite de dende' || key === 'espinafre' || key === 'manga' || key === 'cebola' || key === 'cominho em pó' || key === 'cominho em po' || key === 'frutas frescas' || key === 'leite' || key === 'batata doce' || key === 'banana' || key === 'banana-da-terra' || key === 'banana da terra' || key === 'batata' || key === 'tomate' || key === 'cenoura' || key === 'pimentão vermelho' || key === 'pimentão amarelo' || key === 'pimentão verde' || key === 'brócolis' || key === 'brocolis' || key === 'milho verde' || key === 'aspargo' || key === 'repolho' || key === 'tâmara' || key === 'tamara' || key === 'pão de forma sem casca' || key === 'pao de forma sem casca' || key === 'melado de cana' || key === 'salsinha' || key === 'limão siciliano' || key === 'limao siciliano' || key === 'frango desfiado' || key === 'peito de frango' || key === 'salmão' || key === 'salmao' || key === 'açúcar' || key === 'acucar' || key === 'açúcar mascavo' || key === 'acucar mascavo' || key === 'sal' || key === 'sal negro' || key === 'páprica' || key === 'paprica' || key === 'páprica doce' || key === 'paprica doce' || key === 'suco de laranja' || key === 'alho' || key === 'couve' || key === 'biscoito maizena' || key === 'biscoito maisena' || key === 'raspas de laranja' || key === 'raspas de limão' || key === 'raspas de limao' || key === 'bife de contra-filé' || key === 'filé de tilápia') {
       // Ingredientes já foram processados pela lógica específica, pular processamento geral
       return;
     }
 
     // CORREÇÃO CRÍTICA: Verificar se o ingrediente já foi processado por lógica específica
-    const hasSpecificLogic = ['azeite de oliva', 'azeite', 'azeite de dendê', 'azeite de dende', 'espinafre', 'manga', 'cebola', 'cominho em pó', 'cominho em po', 'frutas frescas', 'leite', 'batata doce', 'banana', 'banana-da-terra', 'banana da terra', 'batata', 'tomate', 'cenoura', 'pimentão vermelho', 'pimentão amarelo', 'pimentão verde', 'brócolis', 'brocolis', 'milho verde', 'aspargo', 'aspargos', 'tâmara', 'tamara', 'pão de forma sem casca', 'pao de forma sem casca', 'melado de cana', 'salsinha', 'limão siciliano', 'limao siciliano', 'frango desfiado', 'peito de frango', 'salmão', 'salmao', 'açúcar', 'acucar', 'açúcar mascavo', 'acucar mascavo', 'sal', 'sal negro', 'páprica', 'paprica', 'páprica doce', 'paprica doce', 'suco de laranja', 'alho', 'couve', 'biscoito maizena', 'biscoito maisena', 'raspas de laranja', 'raspas de limão', 'raspas de limao'].includes(key);
+    const hasSpecificLogic = ['azeite de oliva', 'azeite', 'azeite de dendê', 'azeite de dende', 'espinafre', 'manga', 'cebola', 'cominho em pó', 'cominho em po', 'frutas frescas', 'leite', 'batata doce', 'banana', 'banana-da-terra', 'banana da terra', 'batata', 'tomate', 'cenoura', 'pimentão vermelho', 'pimentão amarelo', 'pimentão verde', 'brócolis', 'brocolis', 'milho verde', 'aspargo', 'repolho', 'tâmara', 'tamara', 'pão de forma sem casca', 'pao de forma sem casca', 'melado de cana', 'salsinha', 'limão siciliano', 'limao siciliano', 'frango desfiado', 'peito de frango', 'salmão', 'salmao', 'açúcar', 'acucar', 'açúcar mascavo', 'acucar mascavo', 'sal', 'sal negro', 'páprica', 'paprica', 'páprica doce', 'paprica doce', 'suco de laranja', 'alho', 'couve', 'biscoito maizena', 'biscoito maisena', 'raspas de laranja', 'raspas de limão', 'raspas de limao', 'bife de contra-filé', 'filé de tilápia'].includes(key);
     
     if (!hasSpecificLogic) {
       // Apenas processar ingredientes que NÃO têm lógica específica
@@ -3180,6 +3379,40 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       const unitWord = roundedUnits > 1 ? 'unidades' : 'unidade';
       
       displayText = `${item.name} – ${correctedWeight}g (aprox. ${roundedUnits} ${unitWord})`;
+      needsApproxWeight = false;
+      
+      // Retornar imediatamente para evitar processamento posterior
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        category: item.category,
+        displayText: displayText,
+        originalUnit: item.originalUnit,
+        household_display: item.household_display,
+        household_weight: item.household_weight
+      };
+    }
+    
+    // CORREÇÃO CIRÚRGICA DEFINITIVA: CEBOLINHA - PRIORIDADE MÁXIMA
+    // 1 talo = 6g = 1 colher de sopa
+    if (item.name.toLowerCase().includes('cebolinha') && item.category === 'Hortifruti') {
+      let totalWeight = item.quantity;
+      
+      const correctedWeight = Math.round(totalWeight);
+      
+      // Calcular talos baseado no peso corrigido (1 talo = 6g)
+      const talos = correctedWeight / 6;
+      const roundedTalos = roundToHalfUnits(talos);
+      
+      // Formatação inteligente baseada na quantidade
+      if (roundedTalos >= 1) {
+        const taloWord = roundedTalos > 1 ? 'talos' : 'talo';
+        displayText = `${item.name} – ${correctedWeight}g (aproximadamente ${roundedTalos} ${taloWord})`;
+      } else {
+        // Se for menos de 1 talo, mostrar apenas peso
+        displayText = `${item.name} – ${correctedWeight}g`;
+      }
       needsApproxWeight = false;
       
       // Retornar imediatamente para evitar processamento posterior
@@ -3858,6 +4091,37 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
         household_weight: item.household_weight
       };
     }
+    // CORREÇÃO CIRÚRGICA DEFINITIVA: REPOLHO - PRIORIDADE MÁXIMA
+    // 1 unidade = 1000g
+    if (item.name.toLowerCase().includes('repolho') && item.category === 'Hortifruti') {
+      // CORREÇÃO CRÍTICA: Usar repolho_total_grams se disponível (consolidado)
+      let totalWeight = item.repolho_total_grams || item.quantity;
+      
+      const correctedWeight = Math.round(totalWeight);
+      const unidades = correctedWeight / 1000;
+      const roundedUnits = Math.round(unidades * 10) / 10; // Arredondar para 1 casa decimal
+      
+      if (roundedUnits >= 1) {
+        const unitWord = roundedUnits > 1 ? 'unidades' : 'unidade';
+        displayText = `${item.name} – ${correctedWeight}g (aprox. ${roundedUnits} ${unitWord})`;
+      } else {
+        displayText = `${item.name} – ${correctedWeight}g`;
+      }
+      
+      needsApproxWeight = false;
+      
+      // Retornar imediatamente para evitar processamento posterior
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        category: item.category,
+        displayText: displayText,
+        originalUnit: item.originalUnit,
+        household_display: item.household_display,
+        household_weight: item.household_weight
+      };
+    }
     // CORREÇÃO: Abacaxi - mostrar peso em gramas com referência em unidades (1 unidade = 1000g)
     else if (nameLowerCorrections.includes('abacaxi')) {
       // VALIDAÇÃO CRÍTICA: Só processar se quantity > 0
@@ -4138,46 +4402,32 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       displayText = `${item.name} – ${formattedQty}g`;
       needsApproxWeight = false;
     }
-    // CORREÇÃO CIRÚRGICA DEFINITIVA: ABACATE - PRIORIDADE MÁXIMA
-    if (item.name.toLowerCase().includes('abacate') && item.category === 'Hortifruti') {
-      let pesoTotal = 0;
-      let unidadesAproximadas = 0;
-      
-      if (item.unit === 'unidades') {
-        // Se está em unidades, converter para peso
-        pesoTotal = Math.round(item.quantity * 350); // 350g por abacate
-        unidadesAproximadas = item.quantity;
-      } else {
-        // Se está em gramas, usar direto
-        pesoTotal = Math.round(item.quantity);
-        unidadesAproximadas = pesoTotal / 350;
-      }
-      
-      // CORREÇÃO CRÍTICA: Mostrar apenas peso se < metade do padrão (175g)
-      if (pesoTotal < 175) {
-        displayText = `${item.name} – ${pesoTotal}g`;
-      } else if (unidadesAproximadas < 1) {
-        // CORREÇÃO: Não mostrar unidades aproximadas para 0.5 unidades
-        displayText = `${item.name} – ${pesoTotal}g`;
-      } else if (unidadesAproximadas === 1) {
-        displayText = `${item.name} – ${pesoTotal}g (aprox. 1 unidade)`;
-      } else {
-        const unidadesArredondadas = Math.round(unidadesAproximadas * 2) / 2;
-        const unitText = unidadesArredondadas === 1 ? 'unidade' : 'unidades';
-        displayText = `${item.name} – ${pesoTotal}g (aprox. ${unidadesArredondadas} ${unitText})`;
-      }
+    // CORREÇÃO CIRÚRGICA DEFINITIVA: ABACATE - PRIORIDADE MÁXIMA (apenas ingrediente base)
+    if ((['abacate','abacate maduro','avocado','avocado maduro'].includes(item.name.toLowerCase())) && item.category === 'Hortifruti') {
+      // Usar valores consolidados calculados anteriormente
+      const units = (item as any).abacate_units_total ?? (item.unit === 'unidades' ? item.quantity : 0);
+      const grams = (item as any).abacate_grams_total ?? (item.unit !== 'unidades' ? item.quantity : 0);
+
+      // Converter unidades aproximadas para gramas usando fator por item
+      // Abacate: 350g/un | Avocado: 200g/un
+      const unitWeight = item.name.toLowerCase().includes('avocado') ? 200 : 350;
+      const totalGrams = Math.round((grams || 0) + (units || 0) * unitWeight);
+      const approxUnits = Math.round((totalGrams / unitWeight) * 2) / 2; // referência visual coerente
+      const unitText = approxUnits === 1 ? 'unidade' : 'unidades';
+      displayText = `${item.name} – ${totalGrams}g (aprox. ${approxUnits} ${unitText})`;
       needsApproxWeight = false;
-      
-      // Retornar imediatamente para evitar processamento posterior
+
       return {
         name: item.name,
-        quantity: item.quantity,
-        unit: item.unit,
+        quantity: totalGrams,
+        unit: 'g',
         category: item.category,
         displayText: displayText,
         originalUnit: item.originalUnit,
         household_display: item.household_display,
-        household_weight: item.household_weight
+        household_weight: item.household_weight,
+        abacate_units_total: units,
+        abacate_grams_total: grams
       };
     }
     // CORREÇÃO CIRÚRGICA DEFINITIVA: ABÓBORA - PRIORIDADE MÁXIMA
@@ -4458,25 +4708,13 @@ export const buildShoppingList = (ingredients: StructuredIngredient[]): Shopping
       displayText = `${item.name} – ${weight}g`;
       needsApproxWeight = false;
     }
-    // CORREÇÃO: Gelatina incolor - mostrar peso + referência em envelope
+    // CORREÇÃO: Gelatina incolor - mostrar peso em gramas com referência em pacotes
     else if (nameLowerCorrections.includes('gelatina incolor')) {
-      let weight = 0;
-      if (item.household_display) {
-        const gelatinaWeightMatch = item.household_display.match(/(\d+(?:\.\d+)?)\s*g/i);
-        if (gelatinaWeightMatch) {
-          weight = parseFloat(gelatinaWeightMatch[1]);
-        } else {
-          weight = item.quantity; // Usar quantity direta
-        }
-      } else {
-        weight = item.quantity; // Usar quantity direta
-      }
+      const weight = Math.round(item.quantity);
+      const pacotes = Math.round(weight / 12);
+      const pacoteText = pacotes === 1 ? 'pacote' : 'pacotes';
       
-      // Calcular envelopes aproximados (12g por envelope)
-      const envelopes = Math.round(weight / 12);
-      const envelopeText = envelopes === 1 ? 'envelope' : 'envelopes';
-      
-      displayText = `${item.name} – ${weight}g (aprox. ${envelopes} ${envelopeText})`;
+      displayText = `${item.name} – ${weight}g (aprox. ${pacotes} ${pacoteText})`;
       needsApproxWeight = false;
     }
     // CORREÇÃO: Pão de forma sem casca - mostrar como fatias baseado no peso consolidado

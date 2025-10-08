@@ -41,7 +41,7 @@ interface MenuSlot {
 }
 
 export const MenuPage: React.FC = () => {
-  const { colors, fontSizes } = useAppPreferences()
+  const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
   const [userId, setUserId] = useState<string | null>(null)
   
@@ -934,14 +934,16 @@ export const MenuPage: React.FC = () => {
         </div>
 
         {/* Card de Instruções */}
-        <div style={{
-          background: `linear-gradient(135deg, #f0fdfa 0%, #ecfdf5 50%, #f0fdfa 100%)`,
-          border: `2px solid #14b8a6`,
-          color: '#115e59',
+        <div style={{ 
+          background: theme === 'dark' 
+            ? `linear-gradient(135deg, #F5F5DC 0%, #F8F8F8 100%)` 
+            : `linear-gradient(135deg, ${colors.background} 0%, ${colors.accent} 100%)`,
+          border: `2px solid #2C5530`,
+          color: '#2C5530',
           padding: '24px',
           borderRadius: '16px',
           marginBottom: '32px',
-          boxShadow: '0 4px 20px rgba(20, 184, 166, 0.15)',
+          boxShadow: '0 4px 20px rgba(44, 85, 48, 0.15)',
           position: 'relative',
           overflow: 'hidden'
         }} role="alert">
@@ -952,7 +954,7 @@ export const MenuPage: React.FC = () => {
             right: '-20px',
             width: '40px',
             height: '40px',
-            background: `radial-gradient(circle, #14b8a620 0%, transparent 70%)`,
+            background: `radial-gradient(circle, #2C553020 0%, transparent 70%)`,
             borderRadius: '50%',
             opacity: 0.6
           }} />
@@ -969,10 +971,11 @@ export const MenuPage: React.FC = () => {
                 width: '48px',
                 height: '48px',
                 borderRadius: '50%',
-                background: `linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)`,
+                background: '#2C5530',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                boxShadow: '0 4px 16px rgba(44,85,48,0.3)'
               }}>
                 <ChefHat size={24} color="white" />
               </div>
@@ -980,7 +983,7 @@ export const MenuPage: React.FC = () => {
                 fontWeight: 700, 
                 fontSize: fontSizes.xl, 
                 margin: 0,
-                color: '#115e59'
+                color: '#2C5530'
               }}>
                 Seu Guia Rápido para o Cardápio Perfeito
               </h3>
@@ -992,7 +995,7 @@ export const MenuPage: React.FC = () => {
                 fontSize: fontSizes.sm, 
                 margin: '0 0 12px 0',
                 lineHeight: 1.6,
-                color: '#115e59'
+                color: '#2C5530'
               }}>
                 <strong>1. Defina sua Semana:</strong> Dê um nome ao cardápio, escolha os dias e quais refeições você quer planejar.
               </p>
@@ -1000,7 +1003,7 @@ export const MenuPage: React.FC = () => {
                 fontSize: fontSizes.sm, 
                 margin: '0 0 12px 0',
                 lineHeight: 1.6,
-                color: '#115e59'
+                color: '#2C5530'
               }}>
                 <strong>2. Consultar o Chef:</strong> Clique em "Gerar Cardápio" e nossa inteligência treinada por chefs criará um menu delicioso para você.
               </p>
@@ -1008,7 +1011,7 @@ export const MenuPage: React.FC = () => {
                 fontSize: fontSizes.sm, 
                 margin: '0 0 12px 0',
                 lineHeight: 1.6,
-                color: '#115e59'
+                color: '#2C5530'
               }}>
                 <strong>3. Assuma o Comando:</strong> Não gostou de uma sugestão? Clique em "Substituir" e troque por qualquer receita do nosso acervo. Afinal, aqui o Chef é você!
               </p>
@@ -1016,7 +1019,7 @@ export const MenuPage: React.FC = () => {
                 fontSize: fontSizes.sm, 
                 margin: '0 0 12px 0',
                 lineHeight: 1.6,
-                color: '#115e59'
+                color: '#2C5530'
               }}>
                 <strong>4. Salve e Relaxe:</strong> Quando seu cardápio estiver perfeito, clique em "Salvar Cardápio" e sua lista de compras será atualizada instantaneamente.
               </p>
@@ -1029,7 +1032,7 @@ export const MenuPage: React.FC = () => {
               gap: '8px',
               fontWeight: 600,
               fontSize: fontSizes.sm,
-              color: '#115e59'
+              color: '#2C5530'
             }}>
               <Sparkles size={16} />
               Planejamento é o seu ingrediente secreto. Mãos à obra, Chef! 🍳
@@ -1127,7 +1130,7 @@ export const MenuPage: React.FC = () => {
               <button 
                 onClick={generateNewMenu} 
                 style={{ 
-                  background: `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`,
+                  background: `linear-gradient(135deg, #CD853F 0%, #B8860B 100%)`,
                   color: '#fff',
                   padding: '12px 20px',
                   borderRadius: '12px',
@@ -1139,15 +1142,15 @@ export const MenuPage: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(44, 85, 48, 0.3)'
+                  boxShadow: '0 2px 8px rgba(205, 133, 63, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 85, 48, 0.4)'
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(205, 133, 63, 0.4)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(44, 85, 48, 0.3)'
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(205, 133, 63, 0.3)'
                 }}
               >
                 <Sparkles size={16} />
@@ -1166,7 +1169,7 @@ export const MenuPage: React.FC = () => {
                 onClick={handleSaveMenu} 
                 disabled={isSaving} 
                 style={{ 
-                  background: '#CD853F',
+                  background: `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`,
                   color: '#fff',
                   padding: '12px 20px',
                   borderRadius: '12px',
@@ -1179,18 +1182,18 @@ export const MenuPage: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 8px rgba(205, 133, 63, 0.3)'
+                  boxShadow: '0 2px 8px rgba(44, 85, 48, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSaving) {
                     e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(205, 133, 63, 0.4)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 85, 48, 0.4)'
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSaving) {
                     e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(205, 133, 63, 0.3)'
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(44, 85, 48, 0.3)'
                   }
                 }}
               >
