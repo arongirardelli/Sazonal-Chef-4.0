@@ -45,7 +45,7 @@ export const Profile: React.FC = () => {
 
   const userName = profile?.display_name || profile?.full_name || profile?.email?.split('@')[0] || 'Chef'
   const avatarLetter = (userName || 'C').charAt(0).toUpperCase()
-  const status = profile?.subscription_status ? `Membro ${profile.subscription_status}` : 'Membro Sazonal Chef'
+  const status = profile?.subscription_status ? `Membro ${profile.subscription_status}` : 'Membro Sazonal Chef: Seu App que Transforma Sua Relação com a Comida'
 
   return (
     <>

@@ -1,4 +1,4 @@
-# Sazonal-Chef-4.0
+# Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
 
 Aplicativo de receitas sazonais com gamificação e sistema de badges.
 
