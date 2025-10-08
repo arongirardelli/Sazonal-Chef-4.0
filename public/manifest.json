@@ -1,7 +1,7 @@
 {
   "name": "Sazonal Chef",
   "short_name": "Sazonal Chef",
-  "description": "Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida. Receitas sazonais, gamificação, lista de compras automática e muito mais!",
+  "description": "Receitas sazonais, cardápios personalizados, lista de compras automática e muito mais!",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F5F0E5",
