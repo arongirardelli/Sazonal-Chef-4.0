@@ -1,0 +1,15 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5174",
+  "executionArgs": {
+    "projectName": "Sazonal Chef 4.0",
+    "projectPath": "/Users/arongirardelli/Desktop/Sazonal Chef 4.0",
+    "testIds": [],
+    "additionalInstruction": "Analise todo o aplicativo Sazonal Chef 4.0 para verificar se está correto, limpo, funcional e pronto para produção. Verifique todas as funcionalidades principais, interface do usuário, autenticação, sistema de receitas, lista de compras, gamificação e recursos PWA.",
+    "envs": {
+      "API_KEY": "sk-user-iTuu__kx44btA9l6kVbbqvPnoCpxxso4SlznTiOPaKO_8Wd2c_0S9CVySH-u-qaGinwqSpyS1RuuFlBnA7pNcmcuYj-l_SFkZhqWebOSa6DEoPyGz5qM2JkCLzFB4oJrJ-M"
+    }
+  }
+}

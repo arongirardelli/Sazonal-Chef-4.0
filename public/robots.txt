@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://sazonalchef.app/sitemap.xml
+Sitemap: https://www.sazonalchef.com/sitemap.xml
 
 # PWA specific
 Allow: /manifest.json
