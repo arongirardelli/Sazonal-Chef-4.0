@@ -9,3 +9,8 @@
 /sw.js
   Content-Type: application/javascript
   Cache-Control: public, max-age=86400
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0

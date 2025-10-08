@@ -326,6 +326,15 @@
         console.log('PWA was installed');
         // Analytics or other tracking
       });
+      
+      // Forçar atualização do Service Worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.update();
+          }
+        });
+      }
     </script>
     
     <!-- Main app script -->
