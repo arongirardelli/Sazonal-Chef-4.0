@@ -26,6 +26,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import RecipePage from './pages/RecipePage'
 
 import { MenuPage } from './pages/MenuPage'
+import { PWAInstallPrompt } from './components/PWAInstallPrompt'
 
 // Componente para redirecionar usuários baseado no status de autenticação
 const RootRedirect: React.FC = () => {
@@ -113,6 +114,7 @@ const App = () => {
               <Route path="/help" element={<ProtectedRoute><HelpSupport /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Routes>
+            <PWAInstallPrompt />
             <Toaster 
               position="top-center" 
               offset={16}
