@@ -1,8 +1,8 @@
-// Service Worker para Sazonal Chef PWA
-const CACHE_NAME = 'sazonal-chef-v1.0.0'
-const STATIC_CACHE = 'sazonal-chef-static-v1.0.0'
-const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v1.0.0'
-const API_CACHE = 'sazonal-chef-api-v1.0.0'
+// Service Worker para Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
+const CACHE_NAME = 'sazonal-chef-v2.0.0'
+const STATIC_CACHE = 'sazonal-chef-static-v2.0.0'
+const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v2.0.0'
+const API_CACHE = 'sazonal-chef-api-v2.0.0'
 
 // Recursos estáticos para cache imediato
 const STATIC_ASSETS = [
@@ -12,10 +12,10 @@ const STATIC_ASSETS = [
   '/src/App.tsx',
   '/src/index.css',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/icon-96.png',
-  '/icons/apple-touch-icon.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  '/icons/icon-96x96.png',
+  '/icons/apple-touch-icon-180x180.png',
   '/icons/favicon-32x32.png',
   '/icons/favicon-16x16.png'
 ]
@@ -180,11 +180,11 @@ self.addEventListener('push', (event) => {
     payload = { title: 'Sazonal Chef', body: event.data.text() }
   }
   
-  const title = payload.title || 'Sazonal Chef'
+  const title = payload.title || 'Sazonal Chef: Seu App que Transforma Sua Relação com a Comida'
   const options = {
-    body: payload.body || 'Nova notificação do Sazonal Chef',
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-96.png',
+    body: payload.body || 'Nova notificação do Sazonal Chef: Seu App que Transforma Sua Relação com a Comida',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-96x96.png',
     data: payload.data || {},
     tag: payload.tag || 'sazonal-chef-notification',
     requireInteraction: payload.requireInteraction || false,
@@ -192,12 +192,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'open',
         title: 'Abrir App',
-        icon: '/icons/icon-96.png'
+        icon: '/icons/icon-96x96.png'
       },
       {
         action: 'close',
         title: 'Fechar',
-        icon: '/icons/icon-96.png'
+        icon: '/icons/icon-96x96.png'
       }
     ]
   }

@@ -1,6 +1,6 @@
 # Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
 
-Aplicativo de receitas sazonais com gamificação e sistema de badges.
+Seu App que Transforma Sua Relação com a Comida - Receitas sazonais com gamificação e sistema de badges.
 
 ## Funcionalidades
 
