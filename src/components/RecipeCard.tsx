@@ -29,7 +29,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = memo(({
   mealType,
   onReplace,
 }) => {
-  const { colors, fontSizes } = useAppPreferences();
+  const { colors, fontSizes, theme } = useAppPreferences();
   
   const handleClick = (e: React.MouseEvent) => {
     if (onClick) {
@@ -450,7 +450,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = memo(({
               gap: '4px',
               fontSize: fontSizes.xs,
               fontWeight: 600,
-              color: colors.text,
+              color: theme === 'dark' ? '#CD853F' : colors.text,
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
             }}>
               <Star size={12} fill="currentColor" />
