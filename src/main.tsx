@@ -20,12 +20,63 @@ import { AssinaturaPage } from './pages/AssinaturaPage'
 import FinalizeAccountPage from './pages/FinalizeAccountPage'
 import { ShoppingList } from './pages/ShoppingList'
 import { AppPreferencesProvider } from './contexts/AppPreferencesContext'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 import RecipePage from './pages/RecipePage'
 
 import { MenuPage } from './pages/MenuPage'
+
+// Componente para redirecionar usuários baseado no status de autenticação
+const RootRedirect: React.FC = () => {
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 50%, #D2B48C 100%)',
+        fontFamily: 'Nunito, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", sans-serif'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          background: 'rgba(255, 255, 255, 0.95)',
+          padding: '40px',
+          borderRadius: '20px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid #e2e8f0',
+            borderTop: '3px solid #CD853F',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }} />
+          <p style={{ color: '#2F2F2F', fontSize: '16px', margin: 0 }}>Carregando...</p>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    )
+  }
+  
+  // Se usuário está logado, redirecionar para início
+  if (user) {
+    return <Navigate to="/inicio" replace />
+  }
+  
+  // Se não está logado, redirecionar para login
+  return <Navigate to="/login" replace />
+}
 
 const App = () => {
   // ============================================================================
@@ -42,7 +93,7 @@ const App = () => {
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/" element={<RootRedirect />} />
               <Route path="/inicio" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
               <Route path="/menu" element={<ProtectedRoute><MenuPage /></ProtectedRoute>} />
               <Route path="/login" element={<LoginPage />} />

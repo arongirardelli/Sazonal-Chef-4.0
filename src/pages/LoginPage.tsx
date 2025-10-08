@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Eye, EyeOff, Mail } from 'lucide-react'
@@ -9,14 +9,60 @@ import { toastStyles } from '../lib/toastStyles'
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { signIn } = useAuth()
+  const { signIn, user, loading } = useAuth()
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const from = location.state?.from?.pathname || '/inicio'
+
+  // Redirecionar usuário já logado
+  useEffect(() => {
+    if (!loading && user) {
+      navigate(from, { replace: true })
+    }
+  }, [user, loading, navigate, from])
+
+  // Mostrar tela de carregamento enquanto verifica autenticação
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #F5F5DC 0%, #F0E68C 50%, #D2B48C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Nunito, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", sans-serif'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          background: 'rgba(255, 255, 255, 0.95)',
+          padding: '40px',
+          borderRadius: '20px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid #e2e8f0',
+            borderTop: '3px solid #CD853F',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }} />
+          <p style={{ color: '#2F2F2F', fontSize: '16px', margin: 0 }}>Verificando credenciais...</p>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    )
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,7 +95,7 @@ export const LoginPage: React.FC = () => {
       return
     }
 
-    setLoading(true)
+    setIsSubmitting(true)
     
     try {
       const result = await signIn(email, password)
@@ -111,7 +157,7 @@ export const LoginPage: React.FC = () => {
         }
       });
     } finally {
-      setLoading(false)
+      setIsSubmitting(false)
     }
   }
 
@@ -390,20 +436,20 @@ export const LoginPage: React.FC = () => {
           {/* Botão de login */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
             onMouseEnter={() => setButtonHovered(true)}
             onMouseLeave={() => setButtonHovered(false)}
             onMouseDown={() => setButtonPressed(true)}
             onMouseUp={() => setButtonPressed(false)}
             style={{
-              ...(loading ? styles.buttonDisabled : styles.button),
-              ...(buttonHovered && !loading ? styles.buttonHover : {}),
-              ...(buttonPressed && !loading ? styles.buttonActive : {})
+              ...(isSubmitting ? styles.buttonDisabled : styles.button),
+              ...(buttonHovered && !isSubmitting ? styles.buttonHover : {}),
+              ...(buttonPressed && !isSubmitting ? styles.buttonActive : {})
             }}
           >
             <div style={styles.buttonContent}>
-              {loading && <div style={styles.spinner} />}
-              <span>{loading ? 'Entrando...' : 'Entrar na Cozinha'}</span>
+              {isSubmitting && <div style={styles.spinner} />}
+              <span>{isSubmitting ? 'Entrando...' : 'Entrar na Cozinha'}</span>
             </div>
           </button>
         </form>

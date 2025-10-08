@@ -163,9 +163,7 @@ export const NotificationSettings: React.FC = () => {
         // Tentar ativar push notifications se suportado
         if (isSupported && !isSubscribed) {
           const success = await subscribe()
-          if (!success) {
-            toast.warning('Notificações ativadas, mas push notifications falharam. Verifique as permissões.', { style: toastStyles.warning })
-          }
+          // Removido toast de aviso sobre push notifications
         }
         
       }
