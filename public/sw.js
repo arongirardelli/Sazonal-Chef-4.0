@@ -1,5 +1,5 @@
-// Service Worker para Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v3.0.0'
+// Service Worker para Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
+const CACHE_NAME = 'sazonal-chef-v3.1.0'
 const STATIC_CACHE = 'sazonal-chef-static-v3.0.0'
 const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v3.0.0'
 
@@ -143,12 +143,12 @@ self.addEventListener('push', (event) => {
   try {
     payload = event.data.json()
   } catch (error) {
-    payload = { title: 'Sazonal Chef: Seu App que Transforma Sua Relação com a Comida', body: event.data.text() }
+    payload = { title: 'Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida', body: event.data.text() }
   }
   
-  const title = payload.title || 'Sazonal Chef: Seu App que Transforma Sua Relação com a Comida'
+  const title = payload.title || 'Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida'
   const options = {
-    body: payload.body || 'Nova notificação do Sazonal Chef: Seu App que Transforma Sua Relação com a Comida',
+    body: payload.body || 'Nova notificação do Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-96x96.png',
     data: payload.data || {},

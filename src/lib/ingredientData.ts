@@ -14,7 +14,7 @@ export const ingredientConversions: Record<string, { primary: string; factor: nu
 };
 
 export const ingredientMasterDictionary: Record<string, IngredientData> = {
-  // Hortifruti - Tabela de Pesos Padronizados - Sazonal Chef: Seu App que Transforma Sua Relação com a Comida
+  // Hortifruti - Tabela de Pesos Padronizados - Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
   'cebola': { primaryUnit: 'unidade', averageWeightGrams: 150, category: 'Hortifruti' }, // 150g - AJUSTADO conforme solicitado
   'cebola roxa': { primaryUnit: 'unidade', averageWeightGrams: 150, category: 'Hortifruti' }, // 150g - AJUSTADO conforme solicitado
   'maçã': { primaryUnit: 'unidade', averageWeightGrams: 150, category: 'Hortifruti' }, // AJUSTADO: valor mais realista

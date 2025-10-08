@@ -322,7 +322,7 @@ export const PrivacySecurity: React.FC = () => {
                   margin: 0,
                   fontWeight: 500
                 }}>
-                  Aqui no Sazonal Chef: Seu App que Transforma Sua Relação com a Comida, sua privacidade é o ingrediente principal. Tratamos seus dados com o mesmo carinho que você trata sua comida: com respeito, transparência e sem adicionar nada que não seja necessário.
+                  Aqui no Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida, sua privacidade é o ingrediente principal. Tratamos seus dados com o mesmo carinho que você trata sua comida: com respeito, transparência e sem adicionar nada que não seja necessário.
                 </p>
               </div>
 

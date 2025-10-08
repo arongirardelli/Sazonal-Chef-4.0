@@ -41,7 +41,7 @@ const App = () => {
         <BrowserRouter>
             <ScrollToTop />
             <Routes>
-              <Route path="/" element={<Navigate to="/inicio" replace />} />
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/inicio" element={<HomePage />} />
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/login" element={<LoginPage />} />
