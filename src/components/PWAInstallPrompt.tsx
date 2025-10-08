@@ -106,23 +106,19 @@ export const PWAInstallPrompt: React.FC = () => {
         bottom: '20px',
         left: '20px',
         right: '20px',
-        background: theme === 'dark' 
-          ? 'linear-gradient(135deg, #CD853F 0%, #B8860B 100%)' 
-          : '#CD853F',
+        background: 'rgb(205, 133, 63)',
         color: 'white',
         padding: '16px',
         borderRadius: '12px',
-        boxShadow: theme === 'dark'
-          ? '0 8px 32px rgba(205, 133, 63, 0.3)'
-          : '0 4px 12px rgba(0,0,0,0.3)',
+        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 4px 12px',
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : 'none'
+        border: 'none'
       }}
     >
-      <div style={{ flex: 1, marginRight: '12px' }}>
+      <div style={{ flex: '1 1 0%', marginRight: '12px' }}>
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
@@ -147,14 +143,14 @@ export const PWAInstallPrompt: React.FC = () => {
             onClick={handleInstall}
             style={{
               background: 'white',
-              color: '#CD853F',
+              color: 'rgb(205, 133, 63)',
               border: 'none',
               padding: '8px 16px',
               borderRadius: '6px',
               fontWeight: 'bold',
               cursor: 'pointer',
               fontSize: '14px',
-              transition: 'all 0.2s ease'
+              transition: '0.2s'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.background = '#f0f0f0'
@@ -177,7 +173,7 @@ export const PWAInstallPrompt: React.FC = () => {
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '14px',
-            transition: 'all 0.2s ease'
+            transition: '0.2s'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
