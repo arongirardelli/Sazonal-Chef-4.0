@@ -9,7 +9,10 @@ export const AssinaturaPage: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut()
-    navigate('/inicio')
+    // Aguardar um pouco para garantir que o estado seja atualizado
+    setTimeout(() => {
+      navigate('/login', { replace: true })
+    }, 100)
   }
 
   return (

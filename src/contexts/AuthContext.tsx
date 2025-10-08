@@ -271,12 +271,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) {
-        toast.error('Erro ao fazer logout')
-      } else {
-        toast.success('Logout realizado com sucesso')
+        console.error('Erro ao fazer logout:', error)
       }
+      // Removido toast de logout para melhor UX
     } catch (error) {
-      toast.error('Erro ao fazer logout')
+      console.error('Erro ao fazer logout:', error)
     }
   }
 

@@ -7,6 +7,7 @@ import { useUserStats } from '@/hooks/useUserStats'
 import { GamificationCard, getLevelNumber } from '@/components/GamificationCard'
 import { BadgeLevelIcon } from '@/components/BadgeLevelIcon'
 import { useAppPreferences } from '../contexts/AppPreferencesContext'
+import { useAuth } from '../contexts/AuthContext'
 import { 
   Bell, 
   Settings, 
@@ -23,6 +24,7 @@ import {
 export const Profile: React.FC = () => {
   const { colors, fontSizes, theme } = useAppPreferences()
   const navigate = useNavigate()
+  const { signOut } = useAuth()
   const [profile, setProfile] = useState<UserProfileRow | null>(null)
   const { stats } = useUserStats()
 
@@ -38,9 +40,12 @@ export const Profile: React.FC = () => {
     fetchData();
   }, []);
 
-  async function signOut() {
-    await supabase.auth.signOut();
-    navigate('/login');
+  const handleSignOut = async () => {
+    await signOut()
+    // Aguardar um pouco para garantir que o estado seja atualizado
+    setTimeout(() => {
+      navigate('/login', { replace: true })
+    }, 100)
   }
 
   const userName = profile?.display_name || profile?.full_name || profile?.email?.split('@')[0] || 'Chef'
@@ -407,7 +412,7 @@ export const Profile: React.FC = () => {
               </button>
               
               <button 
-                onClick={signOut} 
+                onClick={handleSignOut} 
                 style={{ 
                   padding: '16px 20px', 
                   borderRadius: 16, 
