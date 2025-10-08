@@ -1,5 +1,5 @@
 // Service Worker para Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v3.1.0'
+const CACHE_NAME = 'sazonal-chef-v3.2.0'
 const STATIC_CACHE = 'sazonal-chef-static-v3.0.0'
 const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v3.0.0'
 
@@ -109,7 +109,8 @@ async function networkFirst(request, cacheName) {
   try {
     const response = await fetch(request)
     
-    if (response.status === 200) {
+    // Só fazer cache de requisições GET bem-sucedidas
+    if (response.status === 200 && request.method === 'GET') {
       const cache = await caches.open(cacheName)
       cache.put(request, response.clone())
     }

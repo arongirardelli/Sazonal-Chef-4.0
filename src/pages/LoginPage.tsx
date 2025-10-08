@@ -16,7 +16,7 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const from = location.state?.from?.pathname || '/'
+  const from = location.state?.from?.pathname || '/inicio'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

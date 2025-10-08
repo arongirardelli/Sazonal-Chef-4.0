@@ -21,6 +21,7 @@ import FinalizeAccountPage from './pages/FinalizeAccountPage'
 import { ShoppingList } from './pages/ShoppingList'
 import { AppPreferencesProvider } from './contexts/AppPreferencesContext'
 import { AuthProvider } from './contexts/AuthContext'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
 import RecipePage from './pages/RecipePage'
 
@@ -42,23 +43,23 @@ const App = () => {
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/inicio" element={<HomePage />} />
-              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/inicio" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+              <Route path="/menu" element={<ProtectedRoute><MenuPage /></ProtectedRoute>} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/update-password" element={<UpdatePasswordPage />} />
               <Route path="/assinatura" element={<AssinaturaPage />} />
               <Route path="/finalizar-cadastro" element={<FinalizeAccountPage />} />
-              <Route path="/shopping" element={<ShoppingList />} />
-              <Route path="/categorias" element={<Categories />} />
-              <Route path="/salvos" element={<Saved />} />
-              <Route path="/receita/:id" element={<RecipePage />} />
-              <Route path="/perfil" element={<Profile />} />
-              <Route path="/notifications" element={<NotificationSettings />} />
-              <Route path="/preferences" element={<Preferences />} />
-              <Route path="/privacy" element={<PrivacySecurity />} />
-              <Route path="/help" element={<HelpSupport />} />
+              <Route path="/shopping" element={<ProtectedRoute><ShoppingList /></ProtectedRoute>} />
+              <Route path="/categorias" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
+              <Route path="/salvos" element={<ProtectedRoute><Saved /></ProtectedRoute>} />
+              <Route path="/receita/:id" element={<ProtectedRoute><RecipePage /></ProtectedRoute>} />
+              <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><NotificationSettings /></ProtectedRoute>} />
+              <Route path="/preferences" element={<ProtectedRoute><Preferences /></ProtectedRoute>} />
+              <Route path="/privacy" element={<ProtectedRoute><PrivacySecurity /></ProtectedRoute>} />
+              <Route path="/help" element={<ProtectedRoute><HelpSupport /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Routes>
             <Toaster 
