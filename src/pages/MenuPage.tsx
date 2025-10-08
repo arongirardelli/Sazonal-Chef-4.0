@@ -12,7 +12,7 @@ import { toastStyles } from '@/lib/toastStyles'
 import { useAppPreferences } from '../contexts/AppPreferencesContext'
 import { groupBy } from 'lodash'
 import { RecipeModal } from '@/components/RecipeModal'
-import { Calendar, Plus, Save, ShoppingCart, ChefHat, Sparkles, Clock, Users } from 'lucide-react'
+import { Calendar, Plus, Save, ShoppingCart, ChefHat, Sparkles, Clock, Users, AlertTriangle } from 'lucide-react'
 
 type TimeFilter = 'any'|'<=15'|'15-30'|'30-60'|'>60'
 type DifficultyFilter = 'any'|'Fácil'|'Médio'|'Difícil'
@@ -567,16 +567,22 @@ export const MenuPage: React.FC = () => {
       // Verificar se há pelo menos uma receita para salvar
       const hasRecipes = Object.values(menuData).some(dayMeals => Object.keys(dayMeals).length > 0)
       if (!hasRecipes) {
-        toast.warning('Adicione pelo menos uma receita ao cardápio antes de salvar.', {
-          style: {
-            minWidth: 'fit-content',
-            padding: '12px 16px',
-            borderRadius: '8px',
-            textAlign: 'center',
-            fontSize: '14px',
-            fontWeight: '500'
+        toast(
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <AlertTriangle size={20} color="#1f2937" />
+            <span style={{ color: '#1f2937', fontWeight: 500 }}>
+              Adicione pelo menos uma receita ao cardápio antes de salvar.
+            </span>
+          </div>,
+          { 
+            style: {
+              ...toastStyles.warning,
+              background: 'white',
+              border: '1px solid #f59e0b',
+              color: '#1f2937'
+            }
           }
-        })
+        )
         return
       }
       

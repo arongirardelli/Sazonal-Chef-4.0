@@ -293,18 +293,18 @@ export const ShoppingList: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: `linear-gradient(135deg, #8B451315 0%, ${colors.secondary}15 100%)`,
+              background: `linear-gradient(135deg, rgba(205, 133, 63, 0.15) 0%, ${colors.secondary}15 100%)`,
               padding: '8px 16px',
               borderRadius: '12px',
-              border: `1px solid #8B451330`,
+              border: `1px solid rgba(205, 133, 63, 0.3)`,
               marginTop: '12px',
               alignSelf: 'flex-start'
             }}>
-              <ChefHat size={20} color="#8B4513" />
+              <ChefHat size={20} color="rgb(205, 133, 63)" />
               <span style={{
                 fontSize: fontSizes.sm,
                 fontWeight: 600,
-                color: '#8B4513'
+                color: 'rgb(205, 133, 63)'
               }}>
                 {menuName}
               </span>
@@ -793,25 +793,36 @@ export const ShoppingList: React.FC = () => {
 
             {/* Resumo Final */}
             <div style={{ 
-              background: `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`, 
-              color: colors.surface, 
+              background: theme === 'dark' 
+                ? 'linear-gradient(135deg, rgb(245, 245, 220) 0%, rgb(248, 248, 248) 100%)'
+                : `linear-gradient(135deg, #2C5530 0%, #1e3a22 100%)`,
+              border: theme === 'dark' 
+                ? '2px solid rgb(44, 85, 48)'
+                : 'none',
+              color: theme === 'dark' 
+                ? 'rgb(44, 85, 48)'
+                : colors.surface,
               padding: '24px', 
               borderRadius: '16px', 
               fontSize: fontSizes.lg,
               fontWeight: 600,
               textAlign: 'center',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+              boxShadow: theme === 'dark' 
+                ? 'rgba(44, 85, 48, 0.15) 0px 4px 20px'
+                : '0 4px 20px rgba(0, 0, 0, 0.15)',
               position: 'relative',
               overflow: 'hidden'
             }}>
               {/* Elemento decorativo */}
               <div style={{
                 position: 'absolute',
-                top: '-30px',
-                right: '-30px',
-                width: '60px',
-                height: '60px',
-                background: `radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)`,
+                top: theme === 'dark' ? '-20px' : '-30px',
+                right: theme === 'dark' ? '-20px' : '-30px',
+                width: theme === 'dark' ? '40px' : '60px',
+                height: theme === 'dark' ? '40px' : '60px',
+                background: theme === 'dark' 
+                  ? 'radial-gradient(circle, rgba(44, 85, 48, 0.125) 0%, transparent 70%)'
+                  : `radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)`,
                 borderRadius: '50%',
                 opacity: 0.6
               }} />
@@ -824,7 +835,7 @@ export const ShoppingList: React.FC = () => {
                   gap: '12px',
                   marginBottom: '8px'
                 }}>
-                  <CheckCircle size={24} />
+                  <CheckCircle size={24} color={theme === 'dark' ? "rgb(44, 85, 48)" : colors.surface} />
                   <span>Resumo da Lista</span>
                 </div>
                 <div style={{ fontSize: fontSizes.sm, opacity: 0.9 }}>
