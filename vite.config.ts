@@ -19,9 +19,9 @@ export default defineConfig({
     host: true
   },
   build: {
-    // Otimizações para PWA
+    // Otimizações para PWA e Vercel
     target: 'es2015',
-    minify: 'terser',
+    minify: 'esbuild',
     sourcemap: false,
     rollupOptions: {
       output: {
@@ -31,16 +31,14 @@ export default defineConfig({
           router: ['react-router-dom']
         }
       }
-    },
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
     }
   },
   // Configurações para PWA
   define: {
     __PWA_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0')
+  },
+  // Configurações específicas para Vercel
+  optimizeDeps: {
+    include: ['react', 'react-dom', '@supabase/supabase-js', 'react-router-dom']
   }
 })
