@@ -663,7 +663,7 @@ export const MenuPage: React.FC = () => {
       if (saved) {
         const res = await addSavedRecipePoint(userId, confirmIds.length)
         if (res?.leveledUp) {
-          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}.`, {
+          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}!`, {
             style: {
               minWidth: 'fit-content',
               padding: '10px 14px',

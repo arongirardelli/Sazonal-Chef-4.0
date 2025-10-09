@@ -106,19 +106,25 @@ export const GamificationCard: React.FC<Props> = ({ totalPoints = 0, recipesView
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center', 
-            marginBottom: 8 
+            marginBottom: 8,
+            gap: 12
           }}>
             <div style={{ 
               color: colors.textSecondary, 
               fontSize: fontSizes.sm, 
-              fontWeight: 600 
+              fontWeight: 600,
+              flex: 1,
+              minWidth: 0
             }}>
               Progresso para {nextLevelName}
             </div>
             <div style={{ 
               color: colors.textSecondary, 
               fontSize: fontSizes.sm, 
-              fontWeight: 500 
+              fontWeight: 500,
+              flex: 1,
+              textAlign: 'right',
+              minWidth: 0
             }}>
               {nextLevelName === 'Nível Máximo'
                 ? 'Nível máximo alcançado!' 

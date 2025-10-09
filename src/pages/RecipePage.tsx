@@ -55,7 +55,7 @@ export default function RecipePage() {
             try {
               const res = await addRecipeViewPoint(uid);
               if (res?.leveledUp) {
-                toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}.`, {
+                toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}!`, {
                   style: {
                     minWidth: 'fit-content',
                     padding: '10px 14px',

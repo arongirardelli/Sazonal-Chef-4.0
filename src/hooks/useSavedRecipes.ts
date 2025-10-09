@@ -59,7 +59,7 @@ export function useSavedRecipes() {
         // Receita foi salva - adiciona pontos
         const res = await addSavedRecipePoint(userId, confirmIds.length);
         if (res?.leveledUp) {
-          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}.`, {
+          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}!`, {
             style: toastStyles.success
           });
         } else {

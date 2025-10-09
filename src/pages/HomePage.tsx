@@ -340,7 +340,7 @@ export const HomePage: React.FC = () => {
       try {
         const res = await addRecipeViewPoint(userId)
         if (res?.leveledUp) {
-          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}.`, {
+          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}!`, {
             style: toastStyles.success
           })
         }
@@ -371,7 +371,7 @@ export const HomePage: React.FC = () => {
       if (saved) {
         const res = await addSavedRecipePoint(userId, confirmIds.length)
         if (res?.leveledUp) {
-          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}.`, {
+          toast(`🎉 Você subiu de nível! Agora é ${res.chef_level}!`, {
             style: toastStyles.success
           })
         } else {

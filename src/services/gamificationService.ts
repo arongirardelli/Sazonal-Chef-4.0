@@ -1,14 +1,29 @@
 import { supabase } from '@/integrations/supabase'
 
-export type ChefLevel = 'Ajudante de Cozinha' | 'Cozinheiro Amador' | 'Chef de Partida' | 'Sous Chef' | 'Chef Executivo' | 'Chef Michelin'
+// Sistema de níveis baseado no GamificationCard.tsx
+const gamificationLevels = [
+  { name: 'Aprendiz Culinário', minPoints: 0, maxPoints: 50 },
+  { name: 'Ajudante de Cozinha', minPoints: 50, maxPoints: 125 },
+  { name: 'Cozinheiro Amador', minPoints: 125, maxPoints: 250 },
+  { name: 'Cozinheiro Dedicado', minPoints: 250, maxPoints: 450 },
+  { name: 'Artesão Culinário', minPoints: 450, maxPoints: 750 },
+  { name: 'Chef de Fim de Semana', minPoints: 750, maxPoints: 1200 },
+  { name: 'Chef da Brigada', minPoints: 1200, maxPoints: 1900 },
+  { name: 'Sous Chef', minPoints: 1900, maxPoints: 2900 },
+  { name: 'Chef Experiente', minPoints: 2900, maxPoints: 4200 },
+  { name: 'Chef de Cuisine', minPoints: 4200, maxPoints: 6000 },
+  { name: 'Mestre Culinário', minPoints: 6000, maxPoints: 8500 },
+  { name: 'Lenda Culinária', minPoints: 8500, maxPoints: 12000 },
+  { name: 'Ícone da Gastronomia', minPoints: 12000, maxPoints: 17000 },
+  { name: 'Sazonal Chef', minPoints: 17000, maxPoints: Infinity }
+];
 
-export function computeChefLevel(totalPoints: number): ChefLevel {
-  if (totalPoints >= 7001) return 'Chef Michelin'
-  if (totalPoints >= 5001) return 'Chef Executivo'
-  if (totalPoints >= 3001) return 'Sous Chef'
-  if (totalPoints >= 1501) return 'Chef de Partida'
-  if (totalPoints >= 501) return 'Cozinheiro Amador'
-  return 'Ajudante de Cozinha'
+export function computeChefLevel(totalPoints: number): string {
+  const currentLevel = gamificationLevels.find(level => 
+    totalPoints >= level.minPoints && totalPoints < level.maxPoints
+  ) || gamificationLevels[gamificationLevels.length - 1];
+  
+  return currentLevel.name;
 }
 
 export async function getUserSettings(userId: string) {
@@ -32,7 +47,7 @@ export async function awardPoints(userId: string, deltaPoints: number, options?:
   const basePoints = settings?.total_points || 0
   const nextPoints = basePoints + (deltaPoints || 0)
   const nextLevel = computeChefLevel(nextPoints)
-  const prevLevel = settings?.chef_level as ChefLevel | undefined
+  const prevLevel = settings?.chef_level
   const updates: any = { total_points: nextPoints, chef_level: nextLevel, updated_at: new Date().toISOString() }
   if (options?.incViewed) updates.recipes_viewed = (settings?.recipes_viewed || 0) + options.incViewed
   if (typeof options?.setSavedCountTo === 'number') updates.recipes_saved_count = options.setSavedCountTo
@@ -56,9 +71,9 @@ export async function updateSavedRecipeCount(userId: string, savedCount: number)
 }
 
 export async function addMenuActionsPoints(userId: string, recipesAddedCount: number, grantWeeklyBonus: boolean) {
-  const perRecipe = 15 * Math.max(0, recipesAddedCount)
-  const weekly = grantWeeklyBonus ? 50 : 0
-  const delta = perRecipe + weekly
+  // Pontos fixos por cardápio gerado: 25 pontos
+  const menuPoints = 25
+  const delta = menuPoints
   if (delta <= 0) return getUserSettings(userId)
   return awardPoints(userId, delta)
 }
@@ -105,12 +120,7 @@ export async function registerDailyAccessServer() {
 
     // Calcular novos valores
     const totalPoints = (settings?.total_points || 0) + 25
-    const chefLevel = totalPoints >= 7001 ? 'Chef Michelin'
-      : totalPoints >= 5001 ? 'Chef Executivo'
-      : totalPoints >= 3001 ? 'Sous Chef'
-      : totalPoints >= 1501 ? 'Chef de Partida'
-      : totalPoints >= 501 ? 'Cozinheiro Amador'
-      : 'Ajudante de Cozinha'
+    const chefLevel = computeChefLevel(totalPoints)
     const cookingDays = (settings?.cooking_days || 0) + 1
 
     // Atualizar ou criar configurações
