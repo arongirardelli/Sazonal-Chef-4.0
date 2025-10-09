@@ -1,7 +1,7 @@
 // Service Worker para Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v6.0.0'
-const STATIC_CACHE = 'sazonal-chef-static-v6.0.0'
-const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v6.0.0'
+const CACHE_NAME = 'sazonal-chef-v7.0.0'
+const STATIC_CACHE = 'sazonal-chef-static-v7.0.0'
+const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v7.0.0'
 
 // Recursos estáticos para cache imediato
 const STATIC_ASSETS = [
@@ -44,7 +44,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             // Limpar TODOS os caches antigos para forçar atualização
-            if (!cacheName.includes('v6.0.0')) {
+            if (!cacheName.includes('v7.0.0')) {
               console.log('[SW] Removendo cache antigo:', cacheName)
               return caches.delete(cacheName)
             }
@@ -76,18 +76,23 @@ self.addEventListener('fetch', (event) => {
         .then(response => {
           if (response.status === 404) {
             console.log('[SW] Asset 404 detectado para desktop:', request.url)
-            // Limpar cache e tentar novamente
+            // Limpeza agressiva de TODOS os caches
             return caches.keys().then(cacheNames => {
               return Promise.all(
                 cacheNames.map(cacheName => {
-                  if (!cacheName.includes('v6.0.0')) {
+                  if (!cacheName.includes('v7.0.0')) {
                     console.log('[SW] Limpando cache antigo para desktop:', cacheName)
                     return caches.delete(cacheName)
                   }
                 })
               )
             }).then(() => {
-              // Tentar buscar novamente após limpeza
+              // Limpar também o cache do index.html
+              return caches.open(STATIC_CACHE).then(cache => {
+                return cache.delete('/index.html')
+              })
+            }).then(() => {
+              // Tentar buscar novamente após limpeza completa
               return fetch(request)
             })
           }
@@ -95,8 +100,8 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(error => {
           console.log('[SW] Erro ao buscar asset para desktop:', error)
-          // Fallback para cache se disponível
-          return caches.match(request)
+          // Fallback: buscar index.html atual
+          return fetch('/index.html')
         })
     )
     return

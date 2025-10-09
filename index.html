@@ -231,7 +231,7 @@
           caches.keys().then(function(cacheNames) {
             return Promise.all(
               cacheNames.map(function(cacheName) {
-                if (!cacheName.includes('v6.0.0')) {
+                if (!cacheName.includes('v7.0.0')) {
                   console.log('Limpando cache antigo:', cacheName);
                   return caches.delete(cacheName);
                 }
@@ -251,32 +251,77 @@
           
           if (!isPWA) {
             console.log('Erro 404 detectado em asset para desktop:', e.target.src);
-            console.log('Forçando limpeza de cache e reload...');
+            console.log('Forçando limpeza completa de cache...');
             
-            // Limpar cache do navegador se possível
+            // Limpeza mais agressiva
             if ('caches' in window) {
               caches.keys().then(function(cacheNames) {
                 return Promise.all(
                   cacheNames.map(function(cacheName) {
-                    if (!cacheName.includes('v6.0.0')) {
+                    if (!cacheName.includes('v7.0.0')) {
                       console.log('Limpando cache antigo para desktop:', cacheName);
                       return caches.delete(cacheName);
                     }
                   })
                 );
               }).then(() => {
-                // Forçar reload após limpeza
+                // Limpar também localStorage relacionado ao Supabase
+                Object.keys(localStorage).forEach(key => {
+                  if (key.startsWith('sb-') && key.includes('auth')) {
+                    localStorage.removeItem(key);
+                  }
+                });
+                
+                // Limpar sessionStorage
+                sessionStorage.clear();
+                
+                // Forçar reload com bypass de cache
                 setTimeout(() => {
-                  window.location.reload(true);
-                }, 500);
+                  window.location.href = window.location.href + '?v=' + Date.now();
+                }, 300);
               });
             } else {
-              // Fallback: reload direto
+              // Fallback: reload com bypass de cache
               setTimeout(() => {
-                window.location.reload(true);
-              }, 1000);
+                window.location.href = window.location.href + '?v=' + Date.now();
+              }, 500);
             }
           }
+        }
+      });
+      
+      // Detectar se arquivos JS estão obsoletos (desktop)
+      window.addEventListener('load', function() {
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                      window.navigator.standalone === true ||
+                      document.referrer.includes('android-app://')
+        
+        if (!isPWA) {
+          // Verificar se há scripts com hash antigo
+          const scripts = document.querySelectorAll('script[src*="assets/"]');
+          scripts.forEach(script => {
+            if (script.src.includes('index--iFEd7WF.js') || 
+                script.src.includes('index-CSlJEizU.js') ||
+                script.src.includes('index-BNRPC_Yg.js')) {
+              console.log('Script obsoleto detectado:', script.src);
+              console.log('Forçando limpeza de cache...');
+              
+              // Limpeza imediata
+              if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                  return Promise.all(
+                    cacheNames.map(cacheName => {
+                      if (!cacheName.includes('v7.0.0')) {
+                        return caches.delete(cacheName);
+                      }
+                    })
+                  );
+                }).then(() => {
+                  window.location.reload(true);
+                });
+              }
+            }
+          });
         }
       });
     </script>
