@@ -218,14 +218,39 @@
         // Analytics or other tracking
       });
       
-      // Forçar atualização do Service Worker
+      // Forçar atualização do Service Worker e limpeza de cache
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
           for(let registration of registrations) {
             registration.update();
           }
         });
+        
+        // Limpar cache do navegador se possível
+        if ('caches' in window) {
+          caches.keys().then(function(cacheNames) {
+            return Promise.all(
+              cacheNames.map(function(cacheName) {
+                if (!cacheName.includes('v6.0.0')) {
+                  console.log('Limpando cache antigo:', cacheName);
+                  return caches.delete(cacheName);
+                }
+              })
+            );
+          });
+        }
       }
+      
+      // Detectar erros 404 e forçar reload
+      window.addEventListener('error', function(e) {
+        if (e.target && e.target.src && e.target.src.includes('assets/')) {
+          console.log('Erro 404 detectado em asset:', e.target.src);
+          console.log('Forçando reload da página...');
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 1000);
+        }
+      });
     </script>
     
     <!-- Main app script -->
