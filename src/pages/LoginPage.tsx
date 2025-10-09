@@ -101,9 +101,6 @@ export const LoginPage: React.FC = () => {
       const result = await signIn(email, password)
       
       if (result.success) {
-        toast('❤️ Login realizado com sucesso!', {
-          style: toastStyles.success
-        });
         navigate(from)
       } else {
         toast.error('Credenciais inválidas', {

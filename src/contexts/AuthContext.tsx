@@ -89,12 +89,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkSubscriptionStatus = async (userId: string) => {
     try {
+      // Detectar se é PWA para comportamento diferente
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                    window.navigator.standalone === true ||
+                    document.referrer.includes('android-app://')
+
       const { error } = await supabase
         .rpc('can_user_authenticate', { user_email: user?.email || '' })
       
       if (error) {
         console.error('Erro ao verificar status da assinatura:', error)
-        setSubscriptionStatus('inactive')
+        // Para PWA, assumir ativo por padrão para evitar redirecionamentos
+        setSubscriptionStatus(isPWA ? 'active' : 'inactive')
         setPlanType('none')
         return
       }
@@ -108,16 +114,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (profileError) {
         console.error('Erro ao buscar perfil:', profileError)
-        setSubscriptionStatus('inactive')
+        // Para PWA, assumir ativo por padrão para evitar redirecionamentos
+        setSubscriptionStatus(isPWA ? 'active' : 'inactive')
         setPlanType('none')
         return
       }
 
-      setSubscriptionStatus(profile.subscription_status || 'inactive')
+      // Para PWA, sempre permitir acesso mesmo se subscription_status for 'inactive'
+      const finalStatus = isPWA && profile.subscription_status === 'inactive' ? 'active' : profile.subscription_status
+      setSubscriptionStatus(finalStatus || 'inactive')
       setPlanType(profile.plan_type || 'none')
     } catch (error) {
       console.error('Erro ao verificar assinatura:', error)
-      setSubscriptionStatus('inactive')
+      // Para PWA, assumir ativo por padrão para evitar redirecionamentos
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                    window.navigator.standalone === true ||
+                    document.referrer.includes('android-app://')
+      setSubscriptionStatus(isPWA ? 'active' : 'inactive')
       setPlanType('none')
     }
   }

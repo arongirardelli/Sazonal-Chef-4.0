@@ -46,13 +46,9 @@ export const PWAInstallPrompt: React.FC = () => {
       setShowPrompt(true)
     }
 
-    // Para mobile, mostrar prompt após carregamento
+    // Para mobile, mostrar prompt imediatamente após carregamento
     if (isMobile() && !checkIfInstalled()) {
-      const timer = setTimeout(() => {
-        setShowPrompt(true)
-      }, 3000) // 3 segundos após carregamento
-
-      return () => clearTimeout(timer)
+      setShowPrompt(true)
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)

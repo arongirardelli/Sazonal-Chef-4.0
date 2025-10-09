@@ -1,7 +1,7 @@
 // Service Worker para Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v3.3.0'
-const STATIC_CACHE = 'sazonal-chef-static-v3.3.0'
-const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v3.3.0'
+const CACHE_NAME = 'sazonal-chef-v3.4.0'
+const STATIC_CACHE = 'sazonal-chef-static-v3.4.0'
+const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v3.4.0'
 
 // Recursos estáticos para cache imediato
 const STATIC_ASSETS = [
@@ -44,7 +44,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             // Limpar TODOS os caches antigos para forçar atualização
-            if (!cacheName.includes('v3.3.0')) {
+            if (!cacheName.includes('v3.4.0')) {
               console.log('[SW] Removendo cache antigo:', cacheName)
               return caches.delete(cacheName)
             }

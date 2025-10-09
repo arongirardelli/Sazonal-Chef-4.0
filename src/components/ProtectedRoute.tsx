@@ -30,8 +30,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  // Se requer assinatura e o usuário não tem, redirecionar para página de assinatura
-  if (requireSubscription && subscriptionStatus !== 'active' && subscriptionStatus !== 'admin') {
+  // Detectar se é PWA (instalado)
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true ||
+                document.referrer.includes('android-app://')
+
+  // Para PWA, permitir acesso mesmo sem assinatura ativa
+  // A verificação de assinatura será feita na HomePage se necessário
+  if (requireSubscription && subscriptionStatus === 'inactive' && !isPWA) {
+    // Só redirecionar para assinatura se não for PWA e realmente não tiver assinatura
     return <Navigate to="/assinatura" state={{ from: location }} replace />
   }
 
