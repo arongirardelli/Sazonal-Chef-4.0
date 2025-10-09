@@ -35,12 +35,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
                 window.navigator.standalone === true ||
                 document.referrer.includes('android-app://')
 
-  // Para PWA, permitir acesso mesmo sem assinatura ativa
-  // A verificação de assinatura será feita na HomePage se necessário
-  if (requireSubscription && subscriptionStatus === 'inactive' && !isPWA) {
-    // Só redirecionar para assinatura se não for PWA e realmente não tiver assinatura
-    return <Navigate to="/assinatura" state={{ from: location }} replace />
-  }
+  // Temporariamente desabilitado redirecionamento para assinatura
+  // A página de assinatura será configurada posteriormente
+  // if (requireSubscription && subscriptionStatus === 'inactive' && !isPWA) {
+  //   return <Navigate to="/assinatura" state={{ from: location }} replace />
+  // }
 
   return <>{children}</>
 }
