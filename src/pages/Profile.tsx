@@ -41,11 +41,25 @@ export const Profile: React.FC = () => {
   }, []);
 
   const handleSignOut = async () => {
-    await signOut()
-    // Aguardar um pouco para garantir que o estado seja atualizado
-    setTimeout(() => {
-      navigate('/login', { replace: true })
-    }, 100)
+    // Detectar se é desktop (não PWA)
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                  window.navigator.standalone === true ||
+                  document.referrer.includes('android-app://')
+    
+    if (!isPWA) {
+      // Para desktop, aguardar mais tempo para garantir limpeza completa
+      console.log('[Profile] Logout desktop - aguardando limpeza completa')
+      await signOut()
+      setTimeout(() => {
+        navigate('/login', { replace: true })
+      }, 300) // Mais tempo para desktop
+    } else {
+      // Para PWA, manter comportamento original (já funciona perfeitamente)
+      await signOut()
+      setTimeout(() => {
+        navigate('/login', { replace: true })
+      }, 100)
+    }
   }
 
   const userName = profile?.display_name || profile?.full_name || profile?.email?.split('@')[0] || 'Chef'

@@ -282,9 +282,52 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = async (): Promise<void> => {
     try {
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error('Erro ao fazer logout:', error)
+      // Detectar se é desktop (não PWA)
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                    window.navigator.standalone === true ||
+                    document.referrer.includes('android-app://')
+      
+      if (!isPWA) {
+        // Para desktop, implementar logout robusto
+        console.log('[AuthContext] Logout desktop - implementando estratégia robusta')
+        
+        try {
+          // Tentar logout normal primeiro
+          const { error } = await supabase.auth.signOut()
+          if (error) {
+            console.warn('[AuthContext] Logout normal falhou, fazendo logout local:', error)
+            // Logout local quando servidor falha
+            await supabase.auth.signOut({ scope: 'local' })
+          }
+        } catch (error) {
+          console.warn('[AuthContext] Logout falhou completamente, limpando estado local')
+          // Limpeza manual do estado para desktop
+          setUser(null)
+          setSession(null)
+          setSubscriptionStatus('inactive')
+          setPlanType('none')
+          
+          // Limpar localStorage do Supabase manualmente
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+          if (supabaseUrl) {
+            const projectId = supabaseUrl.split('//')[1].split('.')[0]
+            localStorage.removeItem(`sb-${projectId}-auth-token`)
+            localStorage.removeItem(`sb-${projectId}-auth-token-code-verifier`)
+          }
+          
+          // Limpar todos os itens relacionados ao Supabase
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-') && key.includes('auth')) {
+              localStorage.removeItem(key)
+            }
+          })
+        }
+      } else {
+        // Para PWA, manter comportamento original (já funciona perfeitamente)
+        const { error } = await supabase.auth.signOut()
+        if (error) {
+          console.error('Erro ao fazer logout:', error)
+        }
       }
       // Removido toast de logout para melhor UX
     } catch (error) {

@@ -66,6 +66,42 @@ self.addEventListener('fetch', (event) => {
   // Ignorar requisições não-HTTP
   if (!request.url.startsWith('http')) return
 
+  // Detectar se é desktop (não PWA)
+  const isPWA = self.matchMedia && self.matchMedia('(display-mode: standalone)').matches
+  
+  // Para desktop, implementar estratégia mais agressiva para assets
+  if (!isPWA && url.pathname.includes('/assets/')) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.status === 404) {
+            console.log('[SW] Asset 404 detectado para desktop:', request.url)
+            // Limpar cache e tentar novamente
+            return caches.keys().then(cacheNames => {
+              return Promise.all(
+                cacheNames.map(cacheName => {
+                  if (!cacheName.includes('v6.0.0')) {
+                    console.log('[SW] Limpando cache antigo para desktop:', cacheName)
+                    return caches.delete(cacheName)
+                  }
+                })
+              )
+            }).then(() => {
+              // Tentar buscar novamente após limpeza
+              return fetch(request)
+            })
+          }
+          return response
+        })
+        .catch(error => {
+          console.log('[SW] Erro ao buscar asset para desktop:', error)
+          // Fallback para cache se disponível
+          return caches.match(request)
+        })
+    )
+    return
+  }
+
   // Estratégia para recursos estáticos
   if (STATIC_ASSETS.includes(url.pathname)) {
     event.respondWith(cacheFirst(request, STATIC_CACHE))

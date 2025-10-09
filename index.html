@@ -241,14 +241,42 @@
         }
       }
       
-      // Detectar erros 404 e forçar reload
+      // Detectar erros 404 e forçar reload (específico para desktop)
       window.addEventListener('error', function(e) {
         if (e.target && e.target.src && e.target.src.includes('assets/')) {
-          console.log('Erro 404 detectado em asset:', e.target.src);
-          console.log('Forçando reload da página...');
-          setTimeout(() => {
-            window.location.reload(true);
-          }, 1000);
+          // Detectar se é desktop (não PWA)
+          const isPWA = window.matchMedia('(display-mode: standalone)').matches || 
+                        window.navigator.standalone === true ||
+                        document.referrer.includes('android-app://')
+          
+          if (!isPWA) {
+            console.log('Erro 404 detectado em asset para desktop:', e.target.src);
+            console.log('Forçando limpeza de cache e reload...');
+            
+            // Limpar cache do navegador se possível
+            if ('caches' in window) {
+              caches.keys().then(function(cacheNames) {
+                return Promise.all(
+                  cacheNames.map(function(cacheName) {
+                    if (!cacheName.includes('v6.0.0')) {
+                      console.log('Limpando cache antigo para desktop:', cacheName);
+                      return caches.delete(cacheName);
+                    }
+                  })
+                );
+              }).then(() => {
+                // Forçar reload após limpeza
+                setTimeout(() => {
+                  window.location.reload(true);
+                }, 500);
+              });
+            } else {
+              // Fallback: reload direto
+              setTimeout(() => {
+                window.location.reload(true);
+              }, 1000);
+            }
+          }
         }
       });
     </script>
