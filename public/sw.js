@@ -1,7 +1,7 @@
 // Service Worker para Sazonal Chef: O App de Receita Que Transforma Sua Relação com a Comida
-const CACHE_NAME = 'sazonal-chef-v7.0.0'
-const STATIC_CACHE = 'sazonal-chef-static-v7.0.0'
-const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v7.0.0'
+const CACHE_NAME = 'sazonal-chef-v8.0.0'
+const STATIC_CACHE = 'sazonal-chef-static-v8.0.0'
+const DYNAMIC_CACHE = 'sazonal-chef-dynamic-v8.0.0'
 
 // Recursos estáticos para cache imediato
 const STATIC_ASSETS = [
@@ -37,14 +37,14 @@ self.addEventListener('install', (event) => {
 
 // Ativação do Service Worker
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Ativando Service Worker...')
+  console.log('[SW] Ativando Service Worker v8.0.0...')
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            // Limpar TODOS os caches antigos para forçar atualização
-            if (!cacheName.includes('v7.0.0')) {
+            // Limpar TODOS os caches antigos para forçar atualização completa
+            if (!cacheName.includes('v8.0.0')) {
               console.log('[SW] Removendo cache antigo:', cacheName)
               return caches.delete(cacheName)
             }
@@ -52,7 +52,7 @@ self.addEventListener('activate', (event) => {
         )
       })
       .then(() => {
-        console.log('[SW] Service Worker ativado - Cache limpo')
+        console.log('[SW] Service Worker v8.0.0 ativado - Cache completamente limpo')
         return self.clients.claim()
       })
   )
@@ -69,39 +69,49 @@ self.addEventListener('fetch', (event) => {
   // Detectar se é desktop (não PWA)
   const isPWA = self.matchMedia && self.matchMedia('(display-mode: standalone)').matches
   
-  // Para desktop, implementar estratégia mais agressiva para assets
-  if (!isPWA && url.pathname.includes('/assets/')) {
+  // Estratégia especial para assets JS/CSS que podem estar obsoletos
+  if (url.pathname.includes('/assets/') && (url.pathname.endsWith('.js') || url.pathname.endsWith('.css'))) {
     event.respondWith(
       fetch(request)
         .then(response => {
           if (response.status === 404) {
-            console.log('[SW] Asset 404 detectado para desktop:', request.url)
-            // Limpeza agressiva de TODOS os caches
+            console.log('[SW] Asset 404 detectado:', request.url)
+            // Limpeza completa de todos os caches antigos
             return caches.keys().then(cacheNames => {
               return Promise.all(
                 cacheNames.map(cacheName => {
-                  if (!cacheName.includes('v7.0.0')) {
-                    console.log('[SW] Limpando cache antigo para desktop:', cacheName)
+                  if (!cacheName.includes('v8.0.0')) {
+                    console.log('[SW] Limpando cache obsoleto:', cacheName)
                     return caches.delete(cacheName)
                   }
                 })
               )
             }).then(() => {
-              // Limpar também o cache do index.html
+              // Limpar cache do index.html para forçar reload
               return caches.open(STATIC_CACHE).then(cache => {
                 return cache.delete('/index.html')
               })
             }).then(() => {
-              // Tentar buscar novamente após limpeza completa
-              return fetch(request)
+              // Forçar reload da página para buscar assets atualizados
+              return new Response('', {
+                status: 302,
+                headers: {
+                  'Location': '/'
+                }
+              })
             })
           }
           return response
         })
         .catch(error => {
-          console.log('[SW] Erro ao buscar asset para desktop:', error)
-          // Fallback: buscar index.html atual
-          return fetch('/index.html')
+          console.log('[SW] Erro ao buscar asset:', error)
+          // Fallback: redirecionar para página principal
+          return new Response('', {
+            status: 302,
+            headers: {
+              'Location': '/'
+            }
+          })
         })
     )
     return
