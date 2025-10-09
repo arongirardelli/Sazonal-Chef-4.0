@@ -291,16 +291,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Para desktop, implementar logout robusto
         console.log('[AuthContext] Logout desktop - implementando estratégia robusta')
         
+        let logoutSuccess = false
+        
         try {
           // Tentar logout normal primeiro
           const { error } = await supabase.auth.signOut()
-          if (error) {
-            console.warn('[AuthContext] Logout normal falhou, fazendo logout local:', error)
-            // Logout local quando servidor falha
-            await supabase.auth.signOut({ scope: 'local' })
+          if (!error) {
+            logoutSuccess = true
+            console.log('[AuthContext] Logout normal bem-sucedido')
+          } else {
+            console.warn('[AuthContext] Logout normal falhou:', error)
           }
         } catch (error) {
-          console.warn('[AuthContext] Logout falhou completamente, limpando estado local')
+          console.warn('[AuthContext] Logout normal falhou com exceção:', error)
+        }
+        
+        // Se logout normal falhou, tentar logout local
+        if (!logoutSuccess) {
+          try {
+            const { error } = await supabase.auth.signOut({ scope: 'local' })
+            if (!error) {
+              logoutSuccess = true
+              console.log('[AuthContext] Logout local bem-sucedido')
+            } else {
+              console.warn('[AuthContext] Logout local falhou:', error)
+            }
+          } catch (error) {
+            console.warn('[AuthContext] Logout local falhou com exceção:', error)
+          }
+        }
+        
+        // Se ambos falharam, fazer limpeza manual completa
+        if (!logoutSuccess) {
+          console.warn('[AuthContext] Ambos os logouts falharam, executando limpeza manual completa')
+          
           // Limpeza manual do estado para desktop
           setUser(null)
           setSession(null)
@@ -321,6 +345,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               localStorage.removeItem(key)
             }
           })
+          
+          console.log('[AuthContext] Limpeza manual completa executada')
         }
       } else {
         // Para PWA, manter comportamento original (já funciona perfeitamente)

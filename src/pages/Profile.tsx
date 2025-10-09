@@ -50,9 +50,12 @@ export const Profile: React.FC = () => {
       // Para desktop, aguardar mais tempo para garantir limpeza completa
       console.log('[Profile] Logout desktop - aguardando limpeza completa')
       await signOut()
+      
+      // Aguardar mais tempo para garantir que o estado seja atualizado
       setTimeout(() => {
+        console.log('[Profile] Redirecionando para login após logout desktop')
         navigate('/login', { replace: true })
-      }, 300) // Mais tempo para desktop
+      }, 500) // Mais tempo para desktop
     } else {
       // Para PWA, manter comportamento original (já funciona perfeitamente)
       await signOut()
